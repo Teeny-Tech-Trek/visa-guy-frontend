@@ -1,0 +1,236 @@
+/* ─────────────────────────────────────────────────────────────
+   VISA GUY — Premium Animated World-Map Network (pure CSS + divs)
+   - No canvas, no SVG, no three.js, no Lottie.
+   - Everything = HTML divs + CSS gradients + transforms + keyframes.
+   - GPU accelerated (transform / opacity / mask only).
+   - Sits BEHIND hero text, occupies center-right area.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── The animated layer box ──
+   Positioning per spec:
+     ~25% empty from the left   -> left: 25%
+     ~40% empty from the right  -> right: 40%
+     ~40% empty from the bottom -> bottom: 40%
+   pointer-events:none + low z-index so it never blocks text / clicks. */
+.layer {
+  position: absolute;
+  top: 14%;
+  left: 25%;
+  right: 40%;
+  bottom: 40%;
+  z-index: 1;
+  pointer-events: none;
+  /* promote to its own GPU layer so animations stay buttery at 60fps */
+  transform: translateZ(0);
+  will-change: transform;
+  isolation: isolate;
+}
+
+/* subtle navy seat so the network feels embedded, not floating */
+.layer::before {
+  content: "";
+  position: absolute;
+  inset: -12% -18%;
+  background: radial-gradient(
+    ellipse 60% 60% at 55% 45%,
+    rgba(16, 26, 56, 0.55) 0%,
+    rgba(14, 23, 48, 0) 70%
+  );
+}
+
+/* ── Dotted world-map pattern ──
+   Repeating gold dots, masked with a soft ellipse so the rectangle
+   edges dissolve organically (looks like a continent cluster). */
+.dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(212, 175, 106, 0.3) 1.2px,
+    transparent 1.7px
+  );
+  background-size: 22px 22px;
+  background-position: center;
+  -webkit-mask: radial-gradient(
+    ellipse 72% 72% at 50% 45%,
+    #000 30%,
+    transparent 76%
+  );
+  mask: radial-gradient(
+    ellipse 72% 72% at 50% 45%,
+    #000 30%,
+    transparent 76%
+  );
+  animation: mapBreathe 9s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* slow breathing glow on the whole map (8–10s) */
+@keyframes mapBreathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.015);
+  }
+}
+
+/* ── Glow nodes ──
+   Gold radial dot + box-shadow halo. Soft pulse (scale + opacity). */
+.node {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) translateZ(0);
+  background: radial-gradient(
+    circle,
+    #ffe9bf 0%,
+    #d4af6a 45%,
+    rgba(212, 175, 106, 0) 72%
+  );
+  box-shadow: 0 0 12px 2px rgba(212, 175, 106, 0.55);
+  animation: nodePulse var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
+  will-change: transform, opacity;
+}
+
+/* bigger "hub" cities */
+.hub {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 20px 5px rgba(212, 175, 106, 0.6);
+}
+
+/* expanding ripple ring — adds the premium "live signal" feel */
+.node::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 106, 0.45);
+  animation: nodeRipple var(--dur, 4s) ease-out var(--delay, 0s) infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.25);
+    opacity: 1;
+  }
+}
+
+@keyframes nodeRipple {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* ── Connection arcs (curved flight paths) ──
+   Pure-CSS curve trick: a wide/short box with border-radius:50% and
+   ONLY the top border colored renders the top of an ellipse = a soft
+   arc. A horizontal mask fades both ends so it reads as a path. */
+.arc {
+  position: absolute;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(212, 175, 106, 0.32);
+  border-radius: 50%;
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 22%,
+    #000 78%,
+    transparent 100%
+  );
+  mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 22%,
+    #000 78%,
+    transparent 100%
+  );
+  transform: translateZ(0);
+}
+
+/* ── Moving light trail ──
+   Same arc geometry, brighter, with a narrow sliding mask window.
+   The window reveals only a short bright segment of the curve, which
+   travels end-to-end = a golden light dot zipping along the path. */
+.trail {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(247, 226, 167, 0.95);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 5px rgba(247, 226, 167, 0.85));
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent 46%,
+    #000 50%,
+    transparent 54%
+  );
+  mask: linear-gradient(90deg, transparent 46%, #000 50%, transparent 54%);
+  -webkit-mask-size: 230% 100%;
+  mask-size: 230% 100%;
+  animation: trailSlide var(--dur, 5s) linear var(--delay, 0s) infinite;
+  will-change: -webkit-mask-position, mask-position;
+}
+
+@keyframes trailSlide {
+  from {
+    -webkit-mask-position: -65% 0;
+    mask-position: -65% 0;
+  }
+  to {
+    -webkit-mask-position: 165% 0;
+    mask-position: 165% 0;
+  }
+}
+
+/* ─────────────── Responsive ─────────────── */
+
+/* Tablet: pull the layer a touch wider + softer */
+@media (max-width: 1024px) {
+  .layer {
+    left: 22%;
+    right: 30%;
+    bottom: 42%;
+    opacity: 0.85;
+  }
+}
+
+/* Mobile: text takes the full width, so keep the network faint &
+   tucked behind so it never competes with the headline. */
+@media (max-width: 640px) {
+  .layer {
+    top: 12%;
+    left: 30%;
+    right: 6%;
+    bottom: 52%;
+    opacity: 0.55;
+  }
+  .dots {
+    background-size: 18px 18px;
+  }
+}
+
+/* Respect users who prefer no motion — freeze every animation. */
+@media (prefers-reduced-motion: reduce) {
+  .dots,
+  .node,
+  .node::after,
+  .trail {
+    animation: none;
+  }
+}
