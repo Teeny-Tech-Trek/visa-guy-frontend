@@ -1,5 +1,6 @@
 import React from "react";
 import { reviews } from "../../Data/Reviewsdata";
+import { Reveal } from "../../common/Reveal";
 
 /*
   ─────────────────────────────────────────────────────────
@@ -139,45 +140,59 @@ const GoogleReviews: React.FC = () => {
       {/* ───────── Heading block ───────── */}
       <div className="px-4 mb-6 md:mb-8 flex flex-col items-center text-center">
         {/* Eyebrow */}
-        <div className="mb-3 flex items-center gap-3">
-          <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
-          <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
-            GOOGLE REVIEWS
-          </span>
-          <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
-        </div>
+        <Reveal direction="down" delay={0}>
+          <div className="mb-3 flex items-center justify-center gap-3">
+            <span className="h-px w-8 sm:w-10" style={{ backgroundColor: GOLD }} />
+            <span
+              className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.25em]"
+              style={{ color: GOLD }}
+            >
+              GOOGLE REVIEWS
+            </span>
+            <span className="h-px w-8 sm:w-10" style={{ backgroundColor: GOLD }} />
+          </div>
+        </Reveal>
 
         {/* Heading — 2-tone */}
-        <h2 className="text-3xl font-semibold leading-[1.05] sm:text-4xl lg:text-5xl">
-          <span style={{ color: NAVY }}>Trusted by 500+ </span>
-          <span style={{ color: GOLD }}>Happy Clients</span>
-        </h2>
+        <Reveal direction="up" delay={0.08}>
+          <h2 className="font-heading text-2xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl sm:leading-[1.05]">
+            <span style={{ color: NAVY }}>Trusted by 500+ </span>
+            <span style={{ color: GOLD }}>Happy Clients</span>
+          </h2>
+        </Reveal>
 
         {/* Description */}
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed" style={{ color: "#4a5160" }}>
-          Our commitment to excellence has helped thousands of students and
-          families achieve their immigration dreams.
-        </p>
+        <Reveal direction="up" delay={0.16}>
+          <p
+            className="mt-3 max-w-2xl text-sm leading-relaxed"
+            style={{ color: "#4a5160" }}
+          >
+            Our commitment to excellence has helped thousands of students and
+            families achieve their immigration dreams.
+          </p>
+        </Reveal>
 
         {/* Rating badge */}
-        <div
-          className="mt-4 flex items-center gap-3 rounded-full bg-white/60 px-5 py-2.5 shadow-[0_12px_30px_-18px_rgba(35,31,32,0.35)]"
-          style={{ border: "1px solid rgba(35,31,32,0.06)" }}
-        >
-          <GoogleIcon className="h-5 w-5" />
-          <span className="text-lg font-bold" style={{ color: DARK }}>
-            4.9
-          </span>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <StarIcon key={i} />
-            ))}
+        <Reveal direction="up" delay={0.24}>
+          <div
+            className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/60 px-4 py-2 sm:px-5 sm:py-2.5 shadow-[0_12px_30px_-18px_rgba(35,31,32,0.35)]"
+            style={{ border: "1px solid rgba(35,31,32,0.06)" }}
+          >
+            <GoogleIcon className="h-5 w-5" />
+            <span className="text-lg font-bold" style={{ color: DARK }}>
+              4.9
+            </span>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <StarIcon key={i} />
+              ))}
+            </div>
+            <span className="h-5 w-px" style={{ backgroundColor: "rgba(35,31,32,0.12)" }} />
+            <span className="text-sm font-medium" style={{ color: "#6b7280" }}>
+              500+ Reviews
+            </span>
           </div>
-          <span className="h-5 w-px" style={{ backgroundColor: "rgba(35,31,32,0.12)" }} />
-          <span className="text-sm font-medium" style={{ color: "#6b7280" }}>
-            500+ Reviews
-          </span>
-        </div>
+        </Reveal>
       </div>
 
       {/* ───────── Continuous marquee ───────── */}
@@ -204,13 +219,18 @@ const GoogleReviews: React.FC = () => {
       </div>
 
       {/* ───────── Bottom tagline ───────── */}
-      <div className="mt-6 md:mt-8 flex items-center justify-center gap-2">
-        <ShieldBadge />
-        <span className="text-sm font-medium tracking-wide" style={{ color: NAVY }}>
-          Real people. Real stories. Real success.
-        </span>
-        <ShieldBadge />
-      </div>
+      <Reveal direction="up" delay={0.08}>
+        <div className="mt-6 md:mt-8 flex items-center justify-center gap-2 px-4 text-center">
+          <ShieldBadge />
+          <span
+            className="text-xs sm:text-sm font-medium tracking-wide"
+            style={{ color: NAVY }}
+          >
+            Real people. Real stories. Real success.
+          </span>
+          <ShieldBadge />
+        </div>
+      </Reveal>
 
       <style>{`
         .line-clamp-3 {

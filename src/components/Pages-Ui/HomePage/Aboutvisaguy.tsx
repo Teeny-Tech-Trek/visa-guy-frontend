@@ -1,4 +1,6 @@
 import React from "react";
+import { Reveal, revealProps } from "../../common/Reveal";
+import { motion } from "framer-motion";
 
 /*
   ─────────────────────────────────────────────────────────
@@ -87,7 +89,7 @@ const AboutVisaGuy: React.FC = () => {
         `,
       }}
     >
-      <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:px-12 lg:py-16">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-8 overflow-hidden px-4 py-10 sm:gap-10 sm:px-8 sm:py-14 lg:grid-cols-2 lg:px-12 lg:py-16">
         {/* ───────── Left content ───────── */}
         <div className="max-w-xl">
           {/* Eyebrow */}
@@ -102,30 +104,34 @@ const AboutVisaGuy: React.FC = () => {
             </div> */}
 
           {/* Heading — 2-tone */}
-          <h2 className="text-4xl font-semibold leading-[1.08] sm:text-5xl lg:text-6xl">
-            <span style={{ color: NAVY }}>Your Dreams.</span>
-            <br />
-            <span style={{ color: GOLD }}>Our Commitment.</span>
-          </h2>
+          <Reveal direction="left" delay={0}>
+            <h2 className="font-heading text-3xl font-semibold leading-[1.08] sm:text-5xl lg:text-6xl">
+              <span style={{ color: NAVY }}>Your Dreams.</span>
+              <br />
+              <span style={{ color: GOLD }}>Our Commitment.</span>
+            </h2>
 
-          {/* Divider */}
-          <span className="mt-4 block h-px w-12" style={{ backgroundColor: GOLD }} />
+            {/* Divider */}
+            <span className="mt-4 block h-px w-12" style={{ backgroundColor: GOLD }} />
+          </Reveal>
 
           {/* Description */}
-          <p
-            className="mt-6 max-w-md text-sm leading-relaxed sm:text-base"
-            style={{ color: "#4a5160" }}
-          >
-            Visa Guy was founded with a simple mission &ndash; to make
-            immigration simple, transparent and stress&ndash;free. We&rsquo;re
-            here to guide you at every step with honesty, expertise and
-            personalized care.
-          </p>
+          <Reveal direction="left" delay={0.1}>
+            <p
+              className="mt-6 max-w-md text-sm leading-relaxed sm:text-base"
+              style={{ color: "#4a5160" }}
+            >
+              Visa Guy was founded with a simple mission &ndash; to make
+              immigration simple, transparent and stress&ndash;free. We&rsquo;re
+              here to guide you at every step with honesty, expertise and
+              personalized care.
+            </p>
+          </Reveal>
 
           {/* Feature list */}
           <div className="mt-9 space-y-5">
             {features.map((f, i) => (
-              <div key={i}>
+              <motion.div key={i} {...revealProps("left", Math.min(i * 0.08, 0.4))}>
                 <div className="flex items-start gap-4">
                   {/* Icon */}
                   <span
@@ -153,20 +159,20 @@ const AboutVisaGuy: React.FC = () => {
                     style={{ backgroundColor: "rgba(35,31,32,0.12)" }}
                   />
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* ───────── Right image (random for now) ───────── */}
-        <div className="relative flex justify-center lg:justify-end">
+        <Reveal direction="right" delay={0.1} className="relative flex justify-center lg:justify-end">
           <img
             src={ABOUT_IMAGE}
             alt=""
             aria-hidden="true"
-            className="w-full scale-125 select-none object-contain"
+            className="w-full max-w-md scale-110 select-none object-contain sm:max-w-lg sm:scale-125 lg:max-w-none"
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

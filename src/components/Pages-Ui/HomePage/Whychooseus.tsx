@@ -1,4 +1,6 @@
 import React from "react";
+import { Reveal, revealProps } from "../../common/Reveal";
+import { motion } from "framer-motion";
 
 /*
   ─────────────────────────────────────────────────────────
@@ -176,61 +178,73 @@ const WhyChooseUs: React.FC = () => {
         {/* ───────── Left column ───────── */}
         <div>
           {/* Eyebrow */}
-          <div className="mb-5 flex items-center gap-3">
-            <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
-              WHY CHOOSE US
-            </span>
-            <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
-          </div>
+          <Reveal direction="down" delay={0}>
+            <div className="mb-5 flex items-center gap-3">
+              <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
+                WHY CHOOSE US
+              </span>
+              <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
+            </div>
+          </Reveal>
 
           {/* Heading — 2-tone */}
-          <h2 className="text-5xl font-semibold leading-[1.05] sm:text-6xl">
-            <span style={{ color: NAVY }}>Why Choose</span>
-            <br />
-            <span style={{ color: GOLD }}>Visa Guy</span>
-          </h2>
+          <Reveal direction="left" delay={0.08}>
+            <h2 className="font-heading text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
+              <span style={{ color: NAVY }}>Why Choose</span>
+              <br />
+              <span style={{ color: GOLD }}>Visa Guy</span>
+            </h2>
+          </Reveal>
 
           {/* Divider */}
-          <span className="mt-5 block h-px w-12" style={{ backgroundColor: GOLD }} />
+          <Reveal direction="left" delay={0.16}>
+            <span className="mt-5 block h-px w-12" style={{ backgroundColor: GOLD }} />
+          </Reveal>
 
           {/* Description */}
-          <p className="mt-6 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: "#4a5160" }}>
-            We go beyond paperwork. Our commitment, expertise and personalized
-            support make your immigration journey smooth and successful.
-          </p>
+          <Reveal direction="left" delay={0.2}>
+            <p className="mt-6 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: "#4a5160" }}>
+              We go beyond paperwork. Our commitment, expertise and personalized
+              support make your immigration journey smooth and successful.
+            </p>
+          </Reveal>
 
           {/* Button */}
-          <button
-            type="button"
-            className="mt-8 flex items-center gap-4 rounded-full py-2 pl-7 pr-2 transition-transform hover:scale-[1.03]"
-            style={{ backgroundColor: NAVY }}
-          >
-            <span className="text-sm font-bold tracking-wide" style={{ color: CREAM }}>
-              LET&rsquo;S GET STARTED
-            </span>
-            <span
-              className="flex h-9 w-9 items-center justify-center rounded-full"
-              style={{ backgroundColor: GOLD, color: DARK }}
+          <Reveal direction="up" delay={0.28}>
+            <button
+              type="button"
+              className="mt-8 flex items-center gap-4 rounded-full py-2 pl-7 pr-2 transition-transform hover:scale-[1.03]"
+              style={{ backgroundColor: NAVY }}
             >
-              <ArrowIcon />
-            </span>
-          </button>
+              <span className="text-sm font-bold tracking-wide" style={{ color: CREAM }}>
+                LET&rsquo;S GET STARTED
+              </span>
+              <span
+                className="flex h-9 w-9 items-center justify-center rounded-full"
+                style={{ backgroundColor: GOLD, color: DARK }}
+              >
+                <ArrowIcon />
+              </span>
+            </button>
+          </Reveal>
 
           {/* Image (random for now) */}
-          <div className="ml-48  flex justify-center lg:justify-start">
-            <img
-              src={SIDE_IMAGE}
-              alt=""
-              aria-hidden="true"
-              className="w-full max-w-[380px] select-none object-contain"
-            />
-          </div>
+          <Reveal direction="up" delay={0.36}>
+            <div className="mt-8 flex justify-center lg:ml-48 lg:mt-0 lg:justify-start">
+              <img
+                src={SIDE_IMAGE}
+                alt=""
+                aria-hidden="true"
+                className="w-full max-w-[300px] select-none object-contain sm:max-w-[380px]"
+              />
+            </div>
+          </Reveal>
         </div>
 
         {/* ───────── Right column ───────── */}
         <div className="flex flex-col gap-6">
           {/* Comparison card */}
-          <div className="relative rounded-3xl bg-white/55 p-6 shadow-[0_18px_50px_-24px_rgba(35,31,32,0.35)] sm:p-8">
+          <Reveal direction="right" delay={0.1} className="relative rounded-3xl bg-white/55 p-5 shadow-[0_18px_50px_-24px_rgba(35,31,32,0.35)] sm:p-8">
             {/* Headers */}
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
               <p className="text-center text-sm font-bold tracking-[0.2em]" style={{ color: "#9aa0ab" }}>
@@ -252,9 +266,10 @@ const WhyChooseUs: React.FC = () => {
             {/* Rows */}
             <div className="mt-2">
               {rows.map((row, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-5"
+                  {...revealProps("up", Math.min(i * 0.08, 0.4))}
+                  className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-5 sm:gap-4"
                   style={
                     i < rows.length - 1
                       ? { borderBottom: "1px solid rgba(35,31,32,0.08)" }
@@ -262,42 +277,42 @@ const WhyChooseUs: React.FC = () => {
                   }
                 >
                   {/* Others (left) */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <span
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
                       style={{ backgroundColor: "rgba(35,31,32,0.06)", color: "#b89b6e" }}
                     >
                       <XIcon />
                     </span>
-                    <span className="text-sm leading-snug" style={{ color: "#6b7280" }}>
+                    <span className="text-xs leading-snug sm:text-sm" style={{ color: "#6b7280" }}>
                       {row.others}
                     </span>
                   </div>
 
                   {/* Center gold icon */}
                   <span
-                    className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full shadow-md"
+                    className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full shadow-md sm:h-14 sm:w-14"
                     style={{ background: GOLD_RADIAL, color: DARK }}
                   >
                     {row.icon}
                   </span>
 
                   {/* Visa Guy (right) */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <span
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
                       style={{ backgroundColor: "rgba(224,191,148,0.25)", color: "#b89b6e" }}
                     >
                       <CheckIcon />
                     </span>
-                    <span className="text-sm font-medium leading-snug" style={{ color: NAVY }}>
+                    <span className="text-xs font-medium leading-snug sm:text-sm" style={{ color: NAVY }}>
                       {row.visaguy}
                     </span>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/* Stats bar */}
           {/* <div className="rounded-3xl bg-white/45 p-6 shadow-[0_18px_50px_-28px_rgba(35,31,32,0.35)] sm:p-8">

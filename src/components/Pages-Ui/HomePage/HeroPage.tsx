@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import Navbar from "./Navbar";
 import HeroWorldMap from "./HeroWorldMap";
@@ -97,6 +98,7 @@ const heroStats: StatItem[] = [
 
 const HeroPage: React.FC = () => {
   const scopeRef = useRef<HTMLElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -213,7 +215,7 @@ const HeroPage: React.FC = () => {
 
             {/* Heading — char-wise spans for typing animation */}
             <h1
-              className="hero-heading text-4xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
+              className="font-heading hero-heading text-4xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
               aria-label={HEADING_TEXT}
             >
               {HEADING_TEXT.split(" ").map((word, wi) => (
@@ -242,7 +244,11 @@ const HeroPage: React.FC = () => {
             {/* CTA Buttons */}
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <a
-                href="#assessment"
+                href="/coming-soon"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/coming-soon");
+                }}
                 className="hero-cta group flex items-center gap-3 rounded-lg bg-[#f0dcb4] px-7 py-4 text-sm font-bold tracking-wide text-[#0e1730] transition-all hover:bg-[#e9cf9c] hover:shadow-lg hover:shadow-[#d4af6a]/20"
               >
                 FREE ASSESSMENT

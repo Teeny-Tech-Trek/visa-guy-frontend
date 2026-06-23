@@ -1,4 +1,6 @@
 import React from "react";
+import { Reveal, revealProps } from "../../common/Reveal";
+import { motion } from "framer-motion";
 
 /*
   ─────────────────────────────────────────────────────────
@@ -12,9 +14,9 @@ import React from "react";
   ─────────────────────────────────────────────────────────
 */
 
-// 👇 Center image (mirror/passport wali) — baad me change karna
-const CENTER_IMAGE =
-  "/Whatwedo-Image.webp";
+// 👇 Center video — apna video ka path yahan laga dena (e.g. "/Whatwedo-Video.mp4")
+const CENTER_VIDEO =
+  "/Globe-Video.webm";
 
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
@@ -105,12 +107,6 @@ const steps: Step[] = [
     title: "Study Visa",
     desc: "Complete guidance for student visa applications with higher success and minimal delays.",
   },
-  {
-    no: "05",
-    icon: <ChatIcon />,
-    title: "Career Counselling",
-    desc: "Personalized career counselling to help you choose the right path for your future.",
-  },
 ];
 
 // chevron (right pointing) card shape
@@ -137,61 +133,76 @@ const WhatWeDo: React.FC = () => {
           {/* ───────── Left column ───────── */}
           <div className="lg:col-span-4">
             {/* Eyebrow */}
-            <div className="mb-5 flex items-center gap-3">
-              <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
-                WHAT WE DO
-              </span>
-              <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
-            </div>
+            <Reveal direction="down" delay={0}>
+              <div className="mb-5 flex items-center gap-3">
+                <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
+                  WHAT WE DO
+                </span>
+                <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
+              </div>
+            </Reveal>
 
             {/* Heading — 2-tone */}
-            <h2 className="text-4xl font-semibold leading-[1.20]  sm:text-5xl">
-              <span style={{ color: NAVY }}>Guiding You.</span>
-              <br />
-              <span style={{ color: GOLD }}>Every Step <br /> of the Way.</span>
-            </h2>
+            <Reveal direction="left" delay={0.08}>
+              <h2 className="font-heading text-3xl font-semibold leading-[1.20] sm:text-4xl lg:text-5xl">
+                <span style={{ color: NAVY }}>Guiding You.</span>
+                <br />
+                <span style={{ color: GOLD }}>Every Step <br /> of the Way.</span>
+              </h2>
 
-            {/* Divider */}
-            <span className="mt-6 block h-px w-12" style={{ backgroundColor: GOLD }} />
+              {/* Divider */}
+              <span className="mt-6 block h-px w-12" style={{ backgroundColor: GOLD }} />
+            </Reveal>
 
             {/* Description */}
-            <p className="mt-6 max-w-sm text-sm leading-relaxed sm:text-base" style={{ color: "#4a5160" }}>
-              From choosing the right path to achieving your dreams, we provide
-              expert support for every step of your immigration journey.
-            </p>
+            <Reveal direction="left" delay={0.16}>
+              <p className="mt-6 max-w-sm text-sm leading-relaxed sm:text-base" style={{ color: "#4a5160" }}>
+                From choosing the right path to achieving your dreams, we provide
+                expert support for every step of your immigration journey.
+              </p>
+            </Reveal>
 
             {/* Dark expertise card */}
-            <div className="mt-8 max-w-sm rounded-2xl p-6" style={{ backgroundColor: NAVY }}>
-              <div className="flex items-center gap-4">
-                <span
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2"
-                  style={{ borderColor: GOLD, color: GOLD }}
-                >
-                  <CompassIcon />
-                </span>
-                <h3 className="text-lg font-bold leading-tight text-white">
-                  Your Journey,
-                  <br />
-                  Our Expertise.
-                </h3>
+            <Reveal direction="up" delay={0.24}>
+              <div className="mt-8 max-w-sm rounded-2xl p-5 sm:p-6" style={{ backgroundColor: NAVY }}>
+                <div className="flex items-center gap-4">
+                  <span
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2"
+                    style={{ borderColor: GOLD, color: GOLD }}
+                  >
+                    <CompassIcon />
+                  </span>
+                  <h3 className="text-lg font-bold leading-tight text-white">
+                    Your Journey,
+                    <br />
+                    Our Expertise.
+                  </h3>
+                </div>
+                <span className="mt-4 block h-px w-10" style={{ backgroundColor: GOLD }} />
+                <p className="mt-4 text-sm leading-relaxed text-white/80">
+                  Personalized guidance, transparent processes, and end-to-end
+                  support &mdash; that&rsquo;s what we do.
+                </p>
               </div>
-              <span className="mt-4 block h-px w-10" style={{ backgroundColor: GOLD }} />
-              <p className="mt-4 text-sm leading-relaxed text-white/80">
-                Personalized guidance, transparent processes, and end-to-end
-                support &mdash; that&rsquo;s what we do.
-              </p>
-            </div>
+            </Reveal>
           </div>
 
-          {/* ───────── Center image ───────── */}
-          <div className="flex items-center justify-center lg:col-span-3">
-            <img
-              src={CENTER_IMAGE}
-              alt=""
+          {/* ───────── Center video ───────── */}
+          <Reveal direction="up" delay={0.1} className="flex items-center justify-center lg:col-span-3">
+            <video
+              src={CENTER_VIDEO}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              disablePictureInPicture
+              controlsList="nodownload noplaybackrate"
+              onContextMenu={(e) => e.preventDefault()}
               aria-hidden="true"
-              className="w-full scale-125 select-none object-contain"
+              className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
             />
-          </div>
+          </Reveal>
 
           {/* ───────── Right timeline ───────── */}
           <div className="relative lg:col-span-5">

@@ -1,7 +1,9 @@
 import React from "react";
+import { Reveal, revealProps } from "../../common/Reveal";
+import { motion } from "framer-motion";
 
 const CREAM = "#F0EBE4";
-const GOLD = "#C9A96E";
+const GOLD = "#E0BF94";
 const NAVY = "#184068";
 
 const footerBg = {
@@ -123,10 +125,13 @@ const EuropeIcon = () => (
 );
 
 const quickLinks = ["Home", "About Us", "Our Services", "How We Work", "Success Stories", "Contact Us"];
-const services = ["Study Visa", "PR & Permanent Residency", "Work Visa", "Business Visa", "Visitor Visa", "Appeal & Refusal"];
+const services = ["Study Abroad", "Permanent Residency", "Tourist Visa", "Study Visa"];
 
-const NavLink: React.FC<{ label: string }> = ({ label }) => (
-  <li className="flex items-center gap-2 group cursor-pointer">
+const NavLink: React.FC<{ label: string; index?: number }> = ({ label, index = 0 }) => (
+  <motion.li
+    {...revealProps("up", Math.min(index * 0.08, 0.4))}
+    className="flex items-center gap-2 group cursor-pointer"
+  >
     <ChevronRight />
     <span
       className="text-sm transition-colors duration-200"
@@ -134,7 +139,7 @@ const NavLink: React.FC<{ label: string }> = ({ label }) => (
     >
       {label}
     </span>
-  </li>
+  </motion.li>
 );
 
 const SocialButton: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -150,48 +155,29 @@ const VisaGuyFooter: React.FC = () => {
   return (
     <footer style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       {/* Divider with plane */}
-      <div
-        className="flex items-center justify-center py-3"
-        style={{ ...footerBg }}
-      >
-        <div className="flex-1 h-px mx-6" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />
-        <span style={{ color: GOLD }}>
-          <PlaneIcon />
-        </span>
-        <div className="flex-1 h-px mx-6" style={{ background: `linear-gradient(to left, transparent, ${GOLD})` }} />
-      </div>
+      <Reveal direction="up" delay={0}>
+        <div
+          className="flex items-center justify-center py-3"
+          style={{ ...footerBg }}
+        >
+          <div className="flex-1 h-px mx-4 sm:mx-6" style={{ background: `linear-gradient(to right, transparent, ${GOLD})` }} />
+          <span style={{ color: GOLD }}>
+            <PlaneIcon />
+          </span>
+          <div className="flex-1 h-px mx-4 sm:mx-6" style={{ background: `linear-gradient(to left, transparent, ${GOLD})` }} />
+        </div>
+      </Reveal>
 
       {/* Main Footer Body */}
-      <div style={footerBg} className="px-10 py-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10">
+      <div style={footerBg} className="px-6 sm:px-8 md:px-10 py-10 md:py-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10">
 
           {/* Brand Column */}
-          <div className="md:col-span-1 flex flex-col gap-5">
+          <motion.div {...revealProps("left", Math.min(0 * 0.08, 0.4))} className="sm:col-span-2 md:col-span-1 flex flex-col gap-5">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <svg viewBox="0 0 56 56" className="w-full h-full">
-                  {/* Shield */}
-                  <path
-                    d="M28 4 L50 14 L50 32 C50 43 38 52 28 56 C18 52 6 43 6 32 L6 14 Z"
-                    fill="none"
-                    stroke={NAVY}
-                    strokeWidth="2.5"
-                  />
-                  {/* V shape */}
-                  <path
-                    d="M16 16 L28 40 L40 16"
-                    fill="none"
-                    stroke={NAVY}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  {/* Stars */}
-                  <circle cx="28" cy="10" r="1.5" fill={GOLD} />
-                  <circle cx="22" cy="7" r="1" fill={GOLD} />
-                  <circle cx="34" cy="7" r="1" fill={GOLD} />
-                </svg>
+              <div className="relative flex-shrink-0">
+                <img src="/Visa Guy Logo.webp" alt="Visa Guy Logo" className="h-12 w-14 object-contain" />
               </div>
               <div>
                 <div className="text-xl font-bold tracking-widest" style={{ color: NAVY, letterSpacing: "0.15em" }}>
@@ -215,36 +201,36 @@ const VisaGuyFooter: React.FC = () => {
               <SocialButton><LinkedInIcon /></SocialButton>
               <SocialButton><YouTubeIcon /></SocialButton>
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="md:col-span-1">
+          <motion.div {...revealProps("up", Math.min(1 * 0.08, 0.4))} className="md:col-span-1">
             <h3 className="text-sm font-bold tracking-widest mb-4" style={{ color: NAVY, letterSpacing: "0.12em" }}>
               QUICK LINKS
             </h3>
             <div className="w-8 h-0.5 mb-5" style={{ background: GOLD }} />
             <ul className="flex flex-col gap-3">
-              {quickLinks.map((link) => (
-                <NavLink key={link} label={link} />
+              {quickLinks.map((link, i) => (
+                <NavLink key={link} label={link} index={i} />
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Our Services */}
-          <div className="md:col-span-1">
+          <motion.div {...revealProps("up", Math.min(2 * 0.08, 0.4))} className="md:col-span-1">
             <h3 className="text-sm font-bold tracking-widest mb-4" style={{ color: NAVY, letterSpacing: "0.12em" }}>
               OUR SERVICES
             </h3>
             <div className="w-8 h-0.5 mb-5" style={{ background: GOLD }} />
             <ul className="flex flex-col gap-3">
-              {services.map((s) => (
-                <NavLink key={s} label={s} />
+              {services.map((s, i) => (
+                <NavLink key={s} label={s} index={i} />
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Popular Destinations */}
-          <div className="md:col-span-1">
+          <motion.div {...revealProps("up", Math.min(3 * 0.08, 0.4))} className="md:col-span-1">
             <h3 className="text-sm font-bold tracking-widest mb-4" style={{ color: NAVY, letterSpacing: "0.12em" }}>
               POPULAR DESTINATIONS
             </h3>
@@ -255,53 +241,60 @@ const VisaGuyFooter: React.FC = () => {
                 { label: "Australia", Icon: AustraliaIcon },
                 { label: "United Kingdom", Icon: UKIcon },
                 { label: "USA", Icon: USAIcon },
-                { label: "Europe", Icon: EuropeIcon },
-              ].map(({ label, Icon }) => (
-                <li key={label} className="flex items-center gap-3 cursor-pointer hover:opacity-75 transition-opacity">
+              ].map(({ label, Icon }, i) => (
+                <motion.li
+                  {...revealProps("up", Math.min(i * 0.08, 0.4))}
+                  key={label}
+                  className="flex items-center gap-3 cursor-pointer hover:opacity-75 transition-opacity"
+                >
                   <Icon />
                   <span className="text-sm" style={{ color: NAVY }}>
                     {label}
                   </span>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Get In Touch */}
-          <div className="md:col-span-1">
+          <motion.div {...revealProps("right", Math.min(4 * 0.08, 0.4))} className="md:col-span-1">
             <h3 className="text-sm font-bold tracking-widest mb-4" style={{ color: NAVY, letterSpacing: "0.12em" }}>
               GET IN TOUCH
             </h3>
             <div className="w-8 h-0.5 mb-5" style={{ background: GOLD }} />
             <ul className="flex flex-col gap-5">
-              <li className="flex items-center gap-3">
+              <li className="flex items-start gap-3">
                 <span style={{ color: GOLD }}><PhoneIcon /></span>
-                <span className="text-sm" style={{ color: NAVY }}>+91 00000 00000</span>
+                <span className="flex flex-col text-sm" style={{ color: NAVY }}>
+                  <a href="tel:+91888889625" className="hover:opacity-75 transition-opacity">+91 888889625</a>
+                  <a href="tel:+918491061193" className="hover:opacity-75 transition-opacity">+91 8491061193</a>
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <span style={{ color: GOLD }}><MailIcon /></span>
-                <span className="text-sm" style={{ color: NAVY }}>hello@visaguy.com</span>
+                <a href="mailto:hello@visaguy.com" className="text-sm hover:opacity-75 transition-opacity" style={{ color: NAVY }}>hello@visaguy.com</a>
               </li>
               <li className="flex items-start gap-3">
                 <span style={{ color: GOLD }}><MapPinIcon /></span>
                 <span className="text-sm leading-relaxed" style={{ color: NAVY }}>
-                  123, Business Bay,<br />
-                  Next to City Centre,<br />
-                  India 400001
+                  Spearhead, 48 D/C,<br />
+                  Opposite Salon Sprit, Gandhi Nagar,<br />
+                  Jammu, 180004
                 </span>
               </li>
             </ul>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Bottom Bar */}
+      <Reveal direction="up" delay={0}>
       <div
-        className="px-10 py-4 flex flex-col md:flex-row items-center justify-between gap-3"
+        className="px-6 sm:px-8 md:px-10 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left"
         style={{ background: NAVY, borderTop: `1px solid ${GOLD}55` }}
       >
         <span className="text-xs" style={{ color: CREAM, opacity: 0.65 }}>
-          © 2025 Visa Guy. All Rights Reserved.
+          © 2026 Visa Guy. All Rights Reserved.
         </span>
         <div className="flex items-center gap-4">
           <span
@@ -321,10 +314,11 @@ const VisaGuyFooter: React.FC = () => {
         <div className="flex items-center gap-2">
           <span style={{ color: GOLD }}><HeartIcon /></span>
           <span className="text-xs font-medium" style={{ color: CREAM, opacity: 0.75 }}>
-            Trusted by 20K+ Happy Clients
+            Trusted by 50+ Happy Clients
           </span>
         </div>
       </div>
+      </Reveal>
     </footer>
   );
 };

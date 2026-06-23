@@ -1,6 +1,12 @@
 import { useState } from "react";
+import { Reveal, revealProps } from "../../common/Reveal";
+import { motion } from "framer-motion";
+import { submitContactForm } from "../../../services/contactService";
+import type { ContactFormPayload } from "../../../services/contactService";
+import { validateContactForm } from "../../../services/contactValidation";
+import type { ContactErrors } from "../../../services/contactValidation";
 
-const GOLD = "#C9A84C";
+const GOLD = "#E0BF94";
 const NAVY = "#1A2340";
 const CREAM = "#F5F0E8";
 const HOW_WE_WORK_GOLD = "#E0BF94";
@@ -224,11 +230,19 @@ function InputField({
   placeholder,
   icon,
   type = "text",
+  name,
+  value,
+  onChange,
+  error,
 }: {
   label: string;
   placeholder: string;
   icon: React.ReactNode;
   type?: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
 }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
@@ -242,12 +256,15 @@ function InputField({
           display: "flex",
           alignItems: "center",
           gap: 10,
-          borderBottom: `1.5px solid ${BORDER}`,
+          borderBottom: `1.5px solid ${error ? "#c0392b" : BORDER}`,
           paddingBottom: 9,
         }}
       >
         {icon}
         <input
+          name={name}
+          value={value}
+          onChange={onChange}
           type={type}
           placeholder={placeholder}
           style={{
@@ -261,15 +278,27 @@ function InputField({
           }}
         />
       </div>
+      {error && (
+        <span style={{ fontSize: 11.5, color: "#c0392b" }}>{error}</span>
+      )}
     </div>
   );
 }
 
 // --- Main Component ---
+type SubmitStatus = "idle" | "submitting" | "success" | "error";
+
+const INITIAL_FIELDS = { fullName: "", phone: "", email: "", city: "" };
+
 export default function TalkToVisaGuy() {
+  const [fields, setFields] = useState(INITIAL_FIELDS);
   const [interest, setInterest] = useState<InterestOption>("study");
   const [ielts, setIelts] = useState<IeltsOption | null>(null);
   const [profileText, setProfileText] = useState("");
+
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [feedback, setFeedback] = useState("");
 
   const interestOptions: { value: InterestOption; label: string; icon: React.ReactNode }[] = [
     { value: "study", label: "Study Visa", icon: <IconSchool /> },
@@ -283,6 +312,57 @@ export default function TalkToVisaGuy() {
     { value: "awaiting", label: "Awaiting Result", icon: <IconClock /> },
   ];
 
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFields((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (status === "submitting") return;
+
+    const payload: ContactFormPayload = {
+      fullName: fields.fullName,
+      phone: fields.phone,
+      email: fields.email,
+      city: fields.city,
+      interest:
+        interestOptions.find((o) => o.value === interest)?.label ?? interest,
+      ielts: ielts
+        ? ieltsOptions.find((o) => o.value === ielts)?.label ?? ielts
+        : "Not specified",
+      message: profileText.trim(),
+    };
+
+    const validationErrors = validateContactForm(payload);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setStatus("error");
+      setFeedback("Please fill in the required fields correctly.");
+      return;
+    }
+
+    setErrors({});
+    setStatus("submitting");
+    setFeedback("");
+
+    try {
+      const res = await submitContactForm(payload);
+      setStatus("success");
+      setFeedback(res.message);
+      setFields(INITIAL_FIELDS);
+      setInterest("study");
+      setIelts(null);
+      setProfileText("");
+    } catch (err) {
+      setStatus("error");
+      setFeedback(
+        err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      );
+    }
+  };
+
   return (
     <div
       style={{
@@ -294,8 +374,9 @@ export default function TalkToVisaGuy() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        padding: "40px 24px 60px",
+        padding: "clamp(28px, 5vw, 40px) clamp(16px, 4vw, 24px) clamp(40px, 6vw, 60px)",
         boxSizing: "border-box",
+        overflowX: "hidden",
         background: `
           radial-gradient(135% 135% at 100% 0%,   ${HOW_WE_WORK_GOLD} 0%, transparent 50%),
           radial-gradient(135% 135% at 100% 100%, ${HOW_WE_WORK_GOLD} 0%, transparent 50%),
@@ -315,84 +396,90 @@ export default function TalkToVisaGuy() {
         }}
       >
         {/* Eyebrow */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 10,
-            fontSize: 10.5,
-            fontWeight: 600,
-            letterSpacing: "2.5px",
-            color: GOLD,
-            textTransform: "uppercase",
-            marginBottom: 10,
-          }}
-        >
-          <span style={{ display: "block", height: 1, width: 48, background: GOLD }} />
-          <IconMessage />
-          Let&apos;s get &nbsp; started
-          <span style={{ display: "block", height: 1, width: 48, background: GOLD }} />
-        </div>
+        <Reveal direction="down" delay={0}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+              fontSize: 10.5,
+              fontWeight: 600,
+              letterSpacing: "2.5px",
+              color: GOLD,
+              textTransform: "uppercase",
+              marginBottom: 10,
+            }}
+          >
+            <span style={{ display: "block", height: 1, width: 48, background: GOLD }} />
+            <IconMessage />
+            Let&apos;s get &nbsp; started
+            <span style={{ display: "block", height: 1, width: 48, background: GOLD }} />
+          </div>
+        </Reveal>
 
         {/* Title */}
-        <h1
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontSize: 52,
-            fontWeight: 700,
-            margin: "0 0 12px",
-            lineHeight: 1.1,
-            color: NAVY,
-          }}
-        >
-          Talk To{" "}
-          <span style={{ color: GOLD }}>Visa Guy</span>
-        </h1>
+        <Reveal direction="up" delay={0.08}>
+          <h1
+            style={{
+              fontFamily: "'The Seasons', 'Cormorant Garamond', 'Poppins', serif",
+              fontSize: "clamp(34px, 8vw, 52px)",
+              fontWeight: 700,
+              margin: "0 0 12px",
+              lineHeight: 1.1,
+              color: NAVY,
+            }}
+          >
+            Talk To{" "}
+            <span style={{ color: GOLD }}>Visa Guy</span>
+          </h1>
+        </Reveal>
 
-        <p style={{ fontSize: 15, color: BODY_TEXT, lineHeight: 1.65, margin: 0 }}>
-          Planning a move abroad? Share a few details and our
-          <br />
-          experts will guide you through the right path.
-        </p>
+        <Reveal direction="up" delay={0.16}>
+          <p style={{ fontSize: "clamp(14px, 3.5vw, 15px)", color: BODY_TEXT, lineHeight: 1.65, margin: 0 }}>
+            Planning a move abroad? Share a few details and our
+            <br />
+            experts will guide you through the right path.
+          </p>
+        </Reveal>
       </div>
 
       {/* Card */}
+      <Reveal direction="up" delay={0.24} className="w-full max-w-[680px]">
       <div
         style={{
           background: CARD_BG,
           borderRadius: 18,
-          padding: "38px 44px 36px",
+          padding: "clamp(24px, 5vw, 38px) clamp(20px, 5vw, 44px) clamp(24px, 5vw, 36px)",
           width: "100%",
           maxWidth: 680,
           boxSizing: "border-box",
           boxShadow: "0 4px 32px rgba(0,0,0,0.08)",
         }}
       >
+        <form onSubmit={handleSubmit} noValidate>
         {/* Row 1: Full Name + Phone */}
         <div
+          className="grid grid-cols-1 sm:grid-cols-2"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
             gap: "28px 32px",
             marginBottom: 28,
           }}
         >
-          <InputField label="Full Name" placeholder="Enter your full name" icon={<IconUser />} />
-          <InputField label="Phone Number" placeholder="Enter your phone number" icon={<IconPhone />} type="tel" />
+          <InputField label="Full Name" placeholder="Enter your full name" icon={<IconUser />} name="fullName" value={fields.fullName} onChange={handleFieldChange} error={errors.fullName} />
+          <InputField label="Phone Number" placeholder="Enter your phone number" icon={<IconPhone />} type="tel" name="phone" value={fields.phone} onChange={handleFieldChange} error={errors.phone} />
         </div>
 
         {/* Row 2: Email + City */}
         <div
+          className="grid grid-cols-1 sm:grid-cols-2"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
             gap: "28px 32px",
             marginBottom: 30,
           }}
         >
-          <InputField label="Email Address" placeholder="Enter your email address" icon={<IconMail />} type="email" />
-          <InputField label="City" placeholder="Enter your city" icon={<IconMapPin />} />
+          <InputField label="Email Address" placeholder="Enter your email address" icon={<IconMail />} type="email" name="email" value={fields.email} onChange={handleFieldChange} error={errors.email} />
+          <InputField label="City" placeholder="Enter your city" icon={<IconMapPin />} name="city" value={fields.city} onChange={handleFieldChange} error={errors.city} />
         </div>
 
         {/* Interested In */}
@@ -400,21 +487,21 @@ export default function TalkToVisaGuy() {
           I&apos;m interested in
         </p>
         <div
+          className="grid grid-cols-1 sm:grid-cols-3"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
             gap: 10,
             marginBottom: 26,
           }}
         >
-          {interestOptions.map((opt) => (
-            <RadioOption
-              key={opt.value}
-              selected={interest === opt.value}
-              icon={opt.icon}
-              label={opt.label}
-              onClick={() => setInterest(opt.value)}
-            />
+          {interestOptions.map((opt, i) => (
+            <motion.div key={opt.value} {...revealProps("up", Math.min(i * 0.08, 0.4))}>
+              <RadioOption
+                selected={interest === opt.value}
+                icon={opt.icon}
+                label={opt.label}
+                onClick={() => setInterest(opt.value)}
+              />
+            </motion.div>
           ))}
         </div>
 
@@ -423,21 +510,21 @@ export default function TalkToVisaGuy() {
           Have you taken IELTS / PTE?
         </p>
         <div
+          className="grid grid-cols-1 sm:grid-cols-3"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
             gap: 10,
             marginBottom: 26,
           }}
         >
-          {ieltsOptions.map((opt) => (
-            <RadioOption
-              key={opt.value}
-              selected={ielts === opt.value}
-              icon={opt.icon}
-              label={opt.label}
-              onClick={() => setIelts(opt.value)}
-            />
+          {ieltsOptions.map((opt, i) => (
+            <motion.div key={opt.value} {...revealProps("up", Math.min(i * 0.08, 0.4))}>
+              <RadioOption
+                selected={ielts === opt.value}
+                icon={opt.icon}
+                label={opt.label}
+                onClick={() => setIelts(opt.value)}
+              />
+            </motion.div>
           ))}
         </div>
 
@@ -485,12 +572,29 @@ export default function TalkToVisaGuy() {
           </div>
         </div>
 
+        {/* Status / feedback message */}
+        {status !== "idle" && status !== "submitting" && feedback && (
+          <div
+            role="status"
+            style={{
+              marginBottom: 18,
+              padding: "12px 16px",
+              borderRadius: 10,
+              fontSize: 13.5,
+              fontWeight: 500,
+              border: `1.5px solid ${status === "success" ? "#2e7d32" : "#c0392b"}`,
+              background: status === "success" ? "rgba(46,125,50,0.08)" : "rgba(192,57,43,0.07)",
+              color: status === "success" ? "#2e7d32" : "#c0392b",
+            }}
+          >
+            {feedback}
+          </div>
+        )}
+
         {/* Footer */}
         <div
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
             gap: 20,
           }}
         >
@@ -508,6 +612,9 @@ export default function TalkToVisaGuy() {
           </div>
 
           <button
+            type="submit"
+            disabled={status === "submitting"}
+            className="w-full sm:w-auto justify-center sm:justify-start"
             style={{
               background: NAVY,
               color: CREAM,
@@ -517,21 +624,26 @@ export default function TalkToVisaGuy() {
               fontSize: 15,
               fontWeight: 500,
               fontFamily: "inherit",
-              cursor: "pointer",
+              cursor: status === "submitting" ? "not-allowed" : "pointer",
+              opacity: status === "submitting" ? 0.7 : 1,
               display: "flex",
               alignItems: "center",
               gap: 10,
               whiteSpace: "nowrap",
               letterSpacing: "0.2px",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#222d50")}
+            onMouseEnter={(e) => {
+              if (status !== "submitting") e.currentTarget.style.background = "#222d50";
+            }}
             onMouseLeave={(e) => (e.currentTarget.style.background = NAVY)}
           >
-            Start Your Visa Journey
+            {status === "submitting" ? "Sending..." : "Start Your Visa Journey"}
             <IconArrowRight />
           </button>
         </div>
+        </form>
       </div>
+      </Reveal>
     </div>
   );
 }

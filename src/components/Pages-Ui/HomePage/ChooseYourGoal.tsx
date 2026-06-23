@@ -194,7 +194,7 @@ const ChooseYourGoal: React.FC = () => {
         background: `linear-gradient(135deg, ${CREAM} 0%, ${CREAM} 45%, ${GOLD} 100%)`,
       }}
     >
-      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center gap-5 px-5 py-5 sm:px-8 lg:px-12 lg:py-6">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center gap-6 px-4 py-8 sm:gap-5 sm:px-8 sm:py-5 lg:px-12 lg:py-6">
         {/* ───────── Top: Left text + Right image ───────── */}
         <div className="grid flex-1 items-center gap-6 lg:grid-cols-2">
           {/* Left text */}
@@ -212,7 +212,7 @@ const ChooseYourGoal: React.FC = () => {
 
             {/* Heading */}
             <h2
-              className="goal-heading text-4xl font-semibold leading-[1.05] lg:text-5xl xl:text-6xl"
+              className="font-heading goal-heading text-3xl font-semibold leading-[1.05] sm:text-4xl lg:text-5xl xl:text-6xl"
               style={{ color: NAVY }}
             >
               What&rsquo;s your next step abroad?
@@ -234,20 +234,20 @@ const ChooseYourGoal: React.FC = () => {
               src={GOAL_IMAGE}
               alt=""
               aria-hidden="true"
-              className="goal-image max-h-[58vh] w-full max-w-[860px] select-none object-contain"
+              className="goal-image max-h-[40vh] w-full max-w-[860px] select-none object-contain sm:max-h-[58vh]"
             />
           </div>
         </div>
 
         {/* ───────── 4 Goal Cards ───────── */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {goals.map((goal, i) => (
             <div
               key={i}
               className="goal-card flex flex-col items-center rounded-2xl bg-white/70 px-4 py-5 text-center shadow-[0_10px_28px_-14px_rgba(35,31,32,0.28)] backdrop-blur-sm transition-transform hover:-translate-y-1"
             >
               {/* Icon IMAGE */}
-              <div className="mb-3 flex h-24 w-24 items-center justify-center overflow-hidden ">
+              <div className="mb-3 flex h-20 w-20 items-center justify-center overflow-hidden sm:h-24 sm:w-24">
                 <img
                   src={goal.img}
                   alt=""

@@ -1,4 +1,6 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { Reveal, revealProps } from "../../common/Reveal";
 
 const CREAM = "#F0EBE4";
 const GOLD  = "#E0BF94";
@@ -66,9 +68,13 @@ const RadialStep = ({
   id, title, desc, icon, x, y,
 }: { id: string; title: string; desc: string; icon: React.ReactNode; x: number; y: number }) => (
   <div
-    className="absolute flex flex-col items-center text-center"
+    className="absolute"
     style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)", width: 200 }}
   >
+    <motion.div
+      className="flex flex-col items-center text-center"
+      {...revealProps(x < 50 ? "left" : x > 50 ? "right" : "up", 0.1)}
+    >
     <div className="relative mb-2">
       <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: NAVY, color: GOLD }}>
         {icon}
@@ -83,12 +89,13 @@ const RadialStep = ({
     <h3 className="text-sm font-bold mb-1" style={{ color: NAVY }}>{title}</h3>
     <span className="block w-8 h-px mb-2" style={{ background: GOLD }} />
     <p className="text-[11px] leading-relaxed text-black" style={{ color: "" }}>{desc}</p>
+    </motion.div>
   </div>
 );
 
 /* ── Step Row (mobile, borderless) ── */
-const StepRow = ({ id, title, desc, icon }: { id: string; title: string; desc: string; icon: React.ReactNode }) => (
-  <div className="flex items-start gap-4">
+const StepRow = ({ id, title, desc, icon, index = 0 }: { id: string; title: string; desc: string; icon: React.ReactNode; index?: number }) => (
+  <motion.div className="flex items-start gap-4" {...revealProps("up", Math.min(index * 0.08, 0.4))}>
     <div className="relative flex-shrink-0">
       <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: NAVY, color: GOLD }}>
         {icon}
@@ -105,7 +112,7 @@ const StepRow = ({ id, title, desc, icon }: { id: string; title: string; desc: s
       <span className="block w-8 h-px mb-2" style={{ background: GOLD }} />
       <p className="text-xs leading-relaxed" style={{ color: "#4a5160" }}>{desc}</p>
     </div>
-  </div>
+  </motion.div>
 );
 
 /* Steps with radial positions (x / y as % of the desktop stage) */
@@ -142,13 +149,13 @@ export default function HowWeWork() {
       <div className="w-full mx-auto px-6 py-8 lg:px-10" style={{ maxWidth: 1320 }}>
 
         {/* ── Header ── */}
-        <div className="text-center mb-6">
+        <Reveal direction="down" className="text-center mb-6">
           <div className="flex items-center justify-center gap-3 mb-3">
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />
             <span className="text-[11px] font-semibold tracking-[0.25em]" style={{ color: GOLD }}>OUR PROCESS</span>
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />
           </div>
-          <h2 className="text-4xl font-semibold leading-tight lg:text-5xl">
+          <h2 className="font-heading text-3xl sm:text-4xl font-semibold leading-tight lg:text-5xl">
             <span style={{ color: NAVY }}>How We Work,</span>
             <br />
             <span style={{ color: GOLD }}>For Your Success</span>
@@ -158,10 +165,10 @@ export default function HowWeWork() {
             <span style={{ color: GOLD }}><GlobeIcon /></span>
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />
           </div>
-          <p className="text-xs sm:text-sm max-w-sm mx-auto" style={{ color: "#4a5160" }}>
+          <p className="text-xs sm:text-sm max-w-sm mx-auto px-4" style={{ color: "#4a5160" }}>
             A clear, transparent and efficient process to turn your immigration dreams into reality.
           </p>
-        </div>
+        </Reveal>
 
         {/* ── Desktop radial ── */}
         <div className="hidden lg:block relative mx-auto" style={{ height: 560, maxWidth: 1200 }}>
@@ -185,9 +192,16 @@ export default function HowWeWork() {
           </svg>
 
           {/* Center image */}
-          <div className="absolute overflow-hidden" style={{ left: "26%", width: "48%", top: "18%", height: "57%", borderRadius: 48 }}>
+          <motion.div
+            className="absolute overflow-hidden"
+            style={{ left: "26%", width: "48%", top: "18%", height: "57%", borderRadius: 48 }}
+            initial={{ opacity: 0, scale: 0.94 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+          >
             <img src={CENTER_IMAGE} alt="Our team" className="w-full h-full object-cover" />
-          </div>
+          </motion.div>
 
           {/* Steps */}
           {steps.map(s => <RadialStep key={s.id} {...s} />)}
@@ -195,10 +209,12 @@ export default function HowWeWork() {
 
         {/* ── Mobile ── */}
         <div className="lg:hidden flex flex-col gap-5">
-          <div className="relative w-full rounded-2xl overflow-hidden" style={{ height: 200, border: `1.5px dashed ${GOLD}` }}>
-            <img src={CENTER_IMAGE} alt="Our team" className="w-full h-full object-cover" />
-          </div>
-          {steps.map(s => <StepRow key={s.id} {...s} />)}
+          <Reveal direction="up">
+            <div className="relative w-full rounded-2xl overflow-hidden" style={{ height: 200, border: `1.5px dashed ${GOLD}` }}>
+              <img src={CENTER_IMAGE} alt="Our team" className="w-full h-full object-cover" />
+            </div>
+          </Reveal>
+          {steps.map((s, i) => <StepRow key={s.id} {...s} index={i} />)}
         </div>
 
         {/* ── Features Bar ── */}
