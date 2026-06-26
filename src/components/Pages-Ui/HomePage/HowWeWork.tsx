@@ -4,7 +4,8 @@ import { Reveal, revealProps } from "../../common/Reveal";
 
 const CREAM = "#F0EBE4";
 const GOLD  = "#E0BF94";
-const NAVY  = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY  = "#0e1730";
 
 const CENTER_IMAGE =
   "/Team-Image.webp";
@@ -152,13 +153,13 @@ export default function HowWeWork() {
         <Reveal direction="down" className="text-center mb-6">
           <div className="flex items-center justify-center gap-3 mb-3">
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />
-            <span className="text-[11px] font-semibold tracking-[0.25em]" style={{ color: GOLD }}>OUR PROCESS</span>
+            <span className="text-[11px] font-semibold tracking-[0.25em]" style={{ color: GOLD_TEXT }}>OUR PROCESS</span>
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl font-semibold leading-tight lg:text-5xl">
             <span style={{ color: NAVY }}>How We Work,</span>
             <br />
-            <span style={{ color: GOLD }}>For Your Success</span>
+            <span style={{ color: GOLD_TEXT }}>For Your Success</span>
           </h2>
           <div className="flex items-center justify-center gap-3 mt-3 mb-3">
             <span className="h-px w-8" style={{ backgroundColor: GOLD }} />

@@ -4,25 +4,8 @@ import gsap from "gsap";
 import Navbar from "./Navbar";
 import HeroWorldMap from "./HeroWorldMap";
 
-/*
-  ─────────────────────────────────────────────────────────
-  VISA GUY — Hero Section
-  - Full background image (BG_IMAGE — apni Image 2 lagana)
-  - PLANE_IMAGE — right side overlay (clouds/globe ke upar)
-  - GSAP: character-wise typing animation on first page load
-  - Plane: right se fade-in -> apni jagah settle -> fade-out ->
-    yeh poora cycle CONTINUOUSLY repeat hota rehta hai
-  - No custom font-family — project ka universal font hi use hoga
-
-  Install: npm install gsap
-  ─────────────────────────────────────────────────────────
-*/
-
-// 👇 Background image (Image 2 — full bg)
 const BG_IMAGE = "/Hero-Image.webp";
-
-// 👇 Plane PNG (right side overlay — transparent background wali image lagana)
-const PLANE_IMAGE = "/Plane-Image.webp";
+const PLANE_IMAGE = "/Plane-Image1.webp";
 
 const HEADING_TEXT = "Planning your next step abroad is simpler here.";
 
@@ -87,7 +70,6 @@ const stats: StatItem[] = [
   { icon: <UsersIcon />, value: "1000+", label: "Happy Clients" },
 ];
 
-// 👇 Hero ke CTA buttons ke neeche dikhne wali trust row (image wali 3 items)
 const heroStats: StatItem[] = [
   { icon: <MedalIcon />, value: "7+", label: "Years Experience" },
   { icon: <PinIcon />, value: "Jammu & Mohali", label: "Offices" },
@@ -102,74 +84,136 @@ const HeroPage: React.FC = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Text intro — sab text content LEFT side se fade-in ──
-      // First load par eyebrow -> heading -> divider -> description ->
-      // CTA buttons, sab baari-baari left se faded slide-in karte hain.
-      // (Plane ki tarah yeh bhi reduced-motion par chalta hai, kyunki
-      //  user explicitly yeh entrance animation chahta hai.)
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out", duration: 0.6 },
+
+      // ── Intro overlay & intro plane setup ──
+      gsap.set(".intro-overlay", { opacity: 1 });
+      gsap.set(".intro-plane", {
+        opacity: 0,
+        x: "-60vw",
+        y: "-50%",
+        rotation: -6,
+        scale: 0.9,
       });
 
-      // fromTo (set+to) use kar rahe hain — `.from()` ke saath StrictMode
-      // double-invoke par element kabhi-kabhi opacity:0 par atak jaata hai.
-      // fromTo me end state explicit hota hai, isliye yeh hamesha safe hai.
-      tl.fromTo(".hero-eyebrow-line", { opacity: 0, x: -40 }, { opacity: 1, x: 0 })
-        .fromTo(".hero-eyebrow-text", { opacity: 0, x: -40 }, { opacity: 1, x: 0 }, "-=0.45")
-        .fromTo(".hero-heading", { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.7 }, "-=0.35")
-        .fromTo(".hero-divider", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5 }, "-=0.4")
-        .fromTo(".hero-desc", { opacity: 0, x: -40 }, { opacity: 1, x: 0 }, "-=0.4")
-        .fromTo(".hero-cta", { opacity: 0, x: -40 }, { opacity: 1, x: 0, stagger: 0.15 }, "-=0.4");
+      // ── Hero loop plane — fully hidden before loop starts ──
+      gsap.set(".hero-plane", {
+        opacity: 0,
+        xPercent: -140,
+        y: 120,
+        rotation: -10,
+        scale: 0.82,
+      });
 
-      /* ──────────────── PLANE — continuous loop ────────────────
-         NOTE: plane loop hamesha chalta hai (reduced-motion par bhi),
-         kyunki yeh hero ki signature motion hai. Agar strict
-         accessibility chahiye toh ise bhi `if (!prefersReducedMotion)`
-         ke andar move kar sakte ho.
-         right side (off-screen) se fade ke saath udta hua apni
-         original jagah pe aata hai -> thodi der float karta hai ->
-         fir light fade-out hoke wapas reset -> aur yeh cycle
-         HAMESHA repeat hota rehta hai.
-      ─────────────────────────────────────────────────────────── */
-      const planeTl = gsap.timeline({ repeat: -1, repeatDelay: 0.8, delay: 0.3 });
+      const introTl = gsap.timeline();
 
-      planeTl
-        // 1. right se faded-in fly-in -> apni original jagah
-        .fromTo(
-          ".hero-plane",
-          {
-            xPercent: 160, // screen ke bahar — RIGHT side
-            y: -70,
-            rotation: -8,
-            scale: 0.82,
-            opacity: 0, // fade-out se start
-          },
-          {
-            xPercent: 0, // apni original jagah
-            y: 0,
-            rotation: 0,
-            scale: 1,
-            opacity: 1, // fade-in
-            duration: 2.7,
-            ease: "power3.out",
-          }
-        )
-        // 2. apni jagah pe gentle floating (thodi der ruka hua feel)
-        .to(".hero-plane", {
-          y: "-=16",
-          duration: 1.4,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: 1,
-        })
-        // 3. halka fade-out hoke reset (taaki loop smoothly dobara chale)
-        .to(".hero-plane", {
+      introTl
+        .to({}, { duration: 0.6 })
+
+        // loader fade out
+        .to(".intro-loader", {
           opacity: 0,
-          y: -50,
-          scale: 0.9,
-          duration: 1.2,
+          scale: 0.85,
+          duration: 0.35,
           ease: "power2.in",
+        })
+
+        // intro plane flies across screen
+        .to(".intro-plane", {
+          opacity: 1,
+          x: "110vw",
+          y: "-50%",
+          rotation: -3,
+          scale: 1,
+          duration: 2.0,
+          ease: "power1.inOut",
+        })
+
+        // overlay fade out
+        .to(".intro-overlay", {
+          opacity: 0,
+          duration: 0.55,
+          ease: "power2.out",
+          onComplete: () => {
+            const el = document.querySelector(".intro-overlay") as HTMLElement;
+            if (el) el.style.pointerEvents = "none";
+          },
+        }, "-=0.25")
+
+        .set(".intro-plane", { display: "none" })
+
+        // hero content animations
+        .fromTo(
+          ".hero-eyebrow-line",
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }
+        )
+        .fromTo(
+          ".hero-eyebrow-text",
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" },
+          "-=0.45"
+        )
+        .fromTo(
+          ".hero-heading",
+          { opacity: 0, x: -50 },
+          { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" },
+          "-=0.35"
+        )
+        .fromTo(
+          ".hero-divider",
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-desc",
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-cta",
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 },
+          "-=0.4"
+        )
+
+        // ── Start hero plane loop AFTER intro is fully done ──
+        .add(() => {
+          const planeTl = gsap.timeline({ repeat: -1, repeatDelay: 1.2 });
+
+          planeTl
+            .fromTo(
+              ".hero-plane",
+              {
+                xPercent: -140,
+                y: 120,
+                rotation: -10,
+                scale: 0.82,
+                opacity: 0,
+              },
+              {
+                xPercent: -25,
+                y: 0,
+                rotation: 0,
+                scale: 1,
+                opacity: 1,
+                duration: 2.4,
+                ease: "power2.out",
+              }
+            )
+            .to(".hero-plane", { duration: 1.0 })
+            .to(".hero-plane", {
+              xPercent: 140,
+              y: -80,
+              rotation: -8,
+              scale: 0.88,
+              opacity: 0,
+              duration: 2.2,
+              ease: "power2.in",
+            });
         });
+
     }, scopeRef);
 
     return () => ctx.revert();
@@ -180,31 +224,109 @@ const HeroPage: React.FC = () => {
       ref={scopeRef}
       className="relative min-h-screen w-full overflow-hidden bg-[#0e1730]"
     >
-      {/* ── Full Background Image ── */}
+      {/* BLACK INTRO OVERLAY */}
+      <div
+        className="intro-overlay fixed inset-0 z-[9999] bg-black pointer-events-auto"
+        aria-hidden="true"
+      >
+        {/* Loading spinner */}
+        <div
+          className="intro-loader"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "18px",
+          }}
+        >
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            style={{ animation: "visaguy-spin 1.1s linear infinite" }}
+          >
+            <circle cx="28" cy="28" r="23" stroke="#2a3a5c" strokeWidth="4" />
+            <path
+              d="M28 5 a23 23 0 0 1 23 23"
+              stroke="#d4af6a"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            <g transform="translate(28,28)">
+              <path d="M-7 0 L7 0 M0-7 L0 7" stroke="none" />
+              <path
+                d="M-6-2 L2-5 L8 0 L2 5 L-6 2 Z"
+                fill="#d4af6a"
+                transform="rotate(-30)"
+              />
+              <path
+                d="M-2 1 L-6 4 L-4 1 Z"
+                fill="#d4af6a"
+                transform="rotate(-30)"
+              />
+            </g>
+          </svg>
+
+          <span
+            style={{
+              color: "#d4af6a",
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.3em",
+              opacity: 0.85,
+            }}
+          >
+            VISA GUY
+          </span>
+        </div>
+
+        {/* Intro plane — flies across overlay */}
+        <img
+          src={PLANE_IMAGE}
+          alt=""
+          aria-hidden="true"
+          className="intro-plane pointer-events-none select-none drop-shadow-2xl w-[28vw] max-w-[460px]"
+          style={{ position: "absolute", top: "50%", left: 0 }}
+        />
+      </div>
+
+      {/* Spinner keyframe */}
+      <style>{`
+        @keyframes visaguy-spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+      `}</style>
+
+      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${BG_IMAGE})` }}
         aria-hidden="true"
       />
 
-      {/* ── Animated World-Map Network — behind text, center-right ── */}
       <HeroWorldMap />
-
       <Navbar />
 
-      {/* ── Plane overlay — right side, clouds/globe ke upar ── */}
+      {/* Hero Plane — loop wala (opacity-0 by default, GSAP controls it) */}
       <img
         src={PLANE_IMAGE}
         alt=""
         aria-hidden="true"
         className="hero-plane pointer-events-none absolute right-[8%] top-[10%] z-60 hidden w-[26vw] max-w-[490px] -rotate-6 select-none drop-shadow-2xl md:block lg:right-[2%] lg:top-[9%]"
+        style={{ opacity: 0 }}
       />
 
-      {/* ── Content ── */}
+      {/* Main Content */}
       <div className="relative z-10 mx-auto flex min-h-screen max-w-[1400px] flex-col px-5 sm:px-8 lg:px-12">
-        {/* ───────── Hero Text — Left Side ───────── */}
-        <div className="flex flex-1 items-center py-16 lg:py-10 mt-28">
-          <div className="max-w-xl">
+        <div className="flex flex-1 items-center py-12 sm:py-16 lg:py-10 mt-24 sm:mt-28">
+          <div className="w-full max-w-xl">
+
             {/* Eyebrow */}
             <div className="mb-6 flex items-center gap-3">
               <span className="hero-eyebrow-line h-px w-8 bg-[#d4af6a]" />
@@ -213,7 +335,7 @@ const HeroPage: React.FC = () => {
               </span>
             </div>
 
-            {/* Heading — char-wise spans for typing animation */}
+            {/* Heading */}
             <h1
               className="font-heading hero-heading text-4xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
               aria-label={HEADING_TEXT}
@@ -221,11 +343,8 @@ const HeroPage: React.FC = () => {
               {HEADING_TEXT.split(" ").map((word, wi) => (
                 <span key={wi} className="inline-block whitespace-nowrap" aria-hidden="true">
                   {word.split("").map((char, ci) => (
-                    <span key={ci} className="hero-char inline-block">
-                      {char}
-                    </span>
+                    <span key={ci} className="hero-char inline-block">{char}</span>
                   ))}
-                  {/* space between words */}
                   <span className="inline-block">&nbsp;</span>
                 </span>
               ))}
@@ -268,51 +387,42 @@ const HeroPage: React.FC = () => {
               </a>
             </div>
 
-            {/* ───────── Trust / Stats Row (image wali) ───────── */}
-            <div className="hero-cta mt-10 flex flex-nowrap items-center gap-x-4 sm:gap-x-7">
+            {/* Stats Row */}
+            <div className="hero-cta mt-10 flex flex-wrap items-center gap-x-4 gap-y-4 sm:flex-nowrap sm:gap-x-7">
               {heroStats.map((stat, i) => (
                 <React.Fragment key={stat.label}>
                   {i > 0 && (
                     <span
-                      className="h-9 w-px shrink-0 self-center bg-white/12"
+                      className="hidden h-9 w-px shrink-0 self-center bg-white/12 sm:block"
                       aria-hidden="true"
                     />
                   )}
                   <div className="flex items-center gap-2 sm:gap-3">
                     <span className="text-[#d4af6a]">{stat.icon}</span>
                     <div className="leading-tight">
-                      <p className="text-sm font-bold text-white sm:text-[15px]">
-                        {stat.value}
-                      </p>
+                      <p className="text-sm font-bold text-white sm:text-[15px]">{stat.value}</p>
                       <p className="text-xs text-gray-400">{stat.label}</p>
                     </div>
                   </div>
                 </React.Fragment>
               ))}
             </div>
+
           </div>
         </div>
-
-        {/* ───────── Bottom Stats Bar (commented — chahiye toh uncomment) ───────── */}
-        {/* <div className="mb-8 grid grid-cols-1 divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#101a38]/85 backdrop-blur-md sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
-          {stats.map((stat) => (
-            <div key={stat.label} className="hero-stat flex items-center gap-4 px-6 py-5">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#f0dcb4] text-[#0e1730]">
-                {stat.icon}
-              </span>
-              <div>
-                <p className="text-base font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-gray-400">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div> */}
       </div>
     </section>
   );
 };
 
 export default HeroPage;
+
+
+
+
+
+
+
 
 
 

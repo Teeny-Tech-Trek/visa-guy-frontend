@@ -34,7 +34,8 @@ const CARD_IMAGES = {
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 const DARK = "#231F20";
 
 /* ──────────────── Arrow + Stat icons ──────────────── */
@@ -203,7 +204,7 @@ const ChooseYourGoal: React.FC = () => {
             <div className="goal-eyebrow mb-3 flex items-center gap-3">
               <span
                 className="text-[11px] font-semibold tracking-[0.25em]"
-                style={{ color: GOLD }}
+                style={{ color: GOLD_TEXT }}
               >
                 CHOOSE YOUR GOAL
               </span>

@@ -7,7 +7,8 @@ import { validateContactForm } from "../../../services/contactValidation";
 import type { ContactErrors } from "../../../services/contactValidation";
 
 const GOLD = "#E0BF94";
-const NAVY = "#1A2340";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 const CREAM = "#F5F0E8";
 const HOW_WE_WORK_GOLD = "#E0BF94";
 const HOW_WE_WORK_CREAM = "#F0EBE4";
@@ -406,7 +407,7 @@ export default function TalkToVisaGuy() {
               fontSize: 10.5,
               fontWeight: 600,
               letterSpacing: "2.5px",
-              color: GOLD,
+              color: GOLD_TEXT,
               textTransform: "uppercase",
               marginBottom: 10,
             }}
@@ -431,7 +432,7 @@ export default function TalkToVisaGuy() {
             }}
           >
             Talk To{" "}
-            <span style={{ color: GOLD }}>Visa Guy</span>
+            <span style={{ color: GOLD_TEXT }}>Visa Guy</span>
           </h1>
         </Reveal>
 

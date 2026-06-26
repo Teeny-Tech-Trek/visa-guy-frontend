@@ -15,12 +15,13 @@ import { motion } from "framer-motion";
 
 // 👇 Right side image — baad me change karna
 const ABOUT_IMAGE =
-  "/AboutVisaGuy.webp";
+  "/AboutVisaGuy1.webp";
 
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 
 /* ──────────────── Feature icons ──────────────── */
 
@@ -108,7 +109,7 @@ const AboutVisaGuy: React.FC = () => {
             <h2 className="font-heading text-3xl font-semibold leading-[1.08] sm:text-5xl lg:text-6xl">
               <span style={{ color: NAVY }}>Your Dreams.</span>
               <br />
-              <span style={{ color: GOLD }}>Our Commitment.</span>
+              <span style={{ color: GOLD_TEXT }}>Our Commitment.</span>
             </h2>
 
             {/* Divider */}

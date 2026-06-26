@@ -49,7 +49,7 @@ const ComingSoon: React.FC = () => {
       />
       {/* Dark overlay for readability */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[#0e1730]/85 via-[#0e1730]/80 to-[#0e1730]/95"
+        className="absolute inset-0 bg-gradient-to-b from-[#0e1730]/80 via-[#0e1730]/80 to-[#0e1730]/80"
         aria-hidden="true"
       />
 
@@ -76,7 +76,7 @@ const ComingSoon: React.FC = () => {
         {/* Heading */}
         <motion.h1
           {...fade(0.16)}
-          className="font-heading text-5xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl"
+          className="font-heading text-4xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl"
         >
           Coming <span className="text-[#d4af6a]">Soon</span>
         </motion.h1>
@@ -94,10 +94,10 @@ const ComingSoon: React.FC = () => {
         </motion.p>
 
         {/* CTA Buttons */}
-        <motion.div {...fade(0.36)} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <motion.div {...fade(0.36)} className="mt-10 flex w-full flex-col items-stretch justify-center gap-4 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             to="/"
-            className="group flex items-center gap-3 rounded-lg bg-[#f0dcb4] px-7 py-4 text-sm font-bold tracking-wide text-[#0e1730] transition-all hover:bg-[#e9cf9c] hover:shadow-lg hover:shadow-[#d4af6a]/20"
+            className="group flex items-center justify-center gap-3 rounded-lg bg-[#f0dcb4] px-7 py-4 text-sm font-bold tracking-wide text-[#0e1730] transition-all hover:bg-[#e9cf9c] hover:shadow-lg hover:shadow-[#d4af6a]/20"
           >
             <span className="transition-transform group-hover:-translate-x-1">
               <ArrowLeftIcon />
@@ -109,7 +109,7 @@ const ComingSoon: React.FC = () => {
             href="https://wa.me/919888889625"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-lg border border-[#d4af6a]/50 bg-[#0e1730]/60 px-7 py-4 text-sm font-bold tracking-wide text-[#e9cf9c] backdrop-blur-sm transition-all hover:border-[#d4af6a] hover:bg-[#0e1730]/80"
+            className="flex items-center justify-center gap-3 rounded-lg border border-[#d4af6a]/50 bg-[#0e1730]/80 px-7 py-4 text-sm font-bold tracking-wide text-[#e9cf9c] backdrop-blur-sm transition-all hover:border-[#d4af6a] hover:bg-[#0e1730]/80"
           >
             TALK TO VISA GUY
             <WhatsAppIcon />

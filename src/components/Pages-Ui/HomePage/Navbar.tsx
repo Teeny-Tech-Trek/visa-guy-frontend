@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { scrollToTarget } from "../../../lib/smoothScroll";
 
@@ -25,6 +26,7 @@ const WhatsAppIcon = () => (
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Smoothly scroll to the target section via Locomotive Scroll.
   const handleNavClick = (
@@ -33,6 +35,14 @@ const Navbar: React.FC = () => {
   ) => {
     e.preventDefault();
     scrollToTarget(href);
+    setMenuOpen(false);
+  };
+
+  // Logo always returns to the home page (and scrolls to top when already there).
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate("/");
+    scrollToTarget("#home");
     setMenuOpen(false);
   };
 
@@ -45,7 +55,7 @@ const Navbar: React.FC = () => {
     >
       <div className="flex items-center justify-between gap-3">
         {/* Logo */}
-        <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="flex flex-col leading-none">
+        <a href="/" onClick={handleLogoClick} className="flex flex-col leading-none">
           <img src="/Visa Guy Logo.webp" alt="Visa Guy Logo" className="h-10 w-12" />
         </a>
 

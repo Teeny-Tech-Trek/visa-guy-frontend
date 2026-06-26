@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Reveal, revealProps } from "../../common/Reveal";
 import { motion } from "framer-motion";
 
@@ -21,7 +22,8 @@ const CENTER_VIDEO =
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 
 /* ──────────────── Icons ──────────────── */
 
@@ -85,27 +87,33 @@ interface Step {
 const steps: Step[] = [
   {
     no: "01",
-    icon: <CapIcon />,
-    title: "Study Abroad",
-    desc: "Find the right university and course with end-to-end admission support.",
+    icon: <PassportIcon />,
+    title: "Study Visas",
+    desc: "Complete guidance for student visa applications with higher success and minimal delays.",
   },
   {
     no: "02",
     icon: <BankIcon />,
-    title: "Permanent Residency",
-    desc: "Expert assistance for PR pathways and a secure future for you and your family.",
+    title: " Permanent Residency",
+    desc: "Expert assistance for Permanent Residency pathways and a secure future for you and your family.",
   },
   {
     no: "03",
     icon: <SuitcaseIcon />,
-    title: "Tourist Visa",
+    title: "Tourist Visas",
     desc: "Hassle-free tourist visa support for your dream holidays and family visits.",
   },
   {
     no: "04",
-    icon: <PassportIcon />,
-    title: "Study Visa",
-    desc: "Complete guidance for student visa applications with higher success and minimal delays.",
+    icon: <ChatIcon />,
+    title: "IELTS",
+    desc: "Expert IELTS coaching and practice to help you score high with confidence.",
+  },
+  {
+    no: "05",
+    icon: <CapIcon />,
+    title: "PTE",
+    desc: "Focused PTE training and mock tests to help you reach your target score faster.",
   },
 ];
 
@@ -116,6 +124,7 @@ const CHEVRON =
 /* ──────────────────────────── Component ──────────────────────────── */
 
 const WhatWeDo: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <section
       className="w-full"
@@ -135,7 +144,7 @@ const WhatWeDo: React.FC = () => {
             {/* Eyebrow */}
             <Reveal direction="down" delay={0}>
               <div className="mb-5 flex items-center gap-3">
-                <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
+                <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD_TEXT }}>
                   WHAT WE DO
                 </span>
                 <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
@@ -147,7 +156,7 @@ const WhatWeDo: React.FC = () => {
               <h2 className="font-heading text-3xl font-semibold leading-[1.20] sm:text-4xl lg:text-5xl">
                 <span style={{ color: NAVY }}>Guiding You.</span>
                 <br />
-                <span style={{ color: GOLD }}>Every Step <br /> of the Way.</span>
+                <span style={{ color: GOLD_TEXT }}>Every Step <br /> of the Way.</span>
               </h2>
 
               {/* Divider */}
@@ -228,10 +237,12 @@ const WhatWeDo: React.FC = () => {
             <div className="flex flex-col gap-4 lg:pl-14">
               {steps.map((step, i) => {
                 const isOdd = i % 2 === 0; // 0,2,4 -> white ; 1,3 -> cream tint
+                const isStudyVisa = step.title === "Study Visas";
                 return (
                   <div
                     key={step.no}
-                    className="relative flex items-center gap-4 py-5 pl-5 pr-16 shadow-[0_10px_28px_-16px_rgba(35,31,32,0.3)]"
+                    onClick={isStudyVisa ? () => navigate("/study-abroad") : undefined}
+                    className={`relative flex items-center gap-3 py-4 pl-4 pr-10 shadow-[0_10px_28px_-16px_rgba(35,31,32,0.3)] sm:gap-4 sm:py-5 sm:pl-5 sm:pr-16${isStudyVisa ? " cursor-pointer" : ""}`}
                     style={{
                       clipPath: CHEVRON,
                       backgroundColor: isOdd ? "#ffffff" : "rgba(224,191,148,0.28)",
@@ -239,7 +250,7 @@ const WhatWeDo: React.FC = () => {
                   >
                     {/* Icon */}
                     <span
-                      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14"
                       style={{ backgroundColor: NAVY, color: GOLD }}
                     >
                       {step.icon}
@@ -247,7 +258,7 @@ const WhatWeDo: React.FC = () => {
 
                     {/* Text */}
                     <div className="min-w-0">
-                      <h3 className="text-lg font-bold" style={{ color: NAVY }}>
+                      <h3 className="text-base font-bold sm:text-lg" style={{ color: NAVY }}>
                         {step.title}
                       </h3>
                       <p className="mt-1 text-[13px] leading-relaxed" style={{ color: "#5a6170" }}>
@@ -257,7 +268,7 @@ const WhatWeDo: React.FC = () => {
 
                     {/* Big number */}
                     <span
-                      className="absolute right-10 top-1/2 -translate-y-1/2 text-4xl font-bold sm:text-5xl"
+                      className="absolute right-6 top-1/2 -translate-y-1/2 text-3xl font-bold sm:right-10 sm:text-5xl"
                       style={{ color: "rgba(224,191,148,0.55)" }}
                     >
                       {step.no}

@@ -28,3 +28,13 @@ export function scrollToTarget(target: string) {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
+
+/** Jump to the very top of the page instantly (used on route changes). */
+export function scrollToTop() {
+  if (instance) {
+    // Locomotive v5 (Lenis): duration 0 = no animation, just snap to top.
+    instance.scrollTo(0, { duration: 0, immediate: true });
+  }
+  // Also reset the native scroll position as a fallback / belt-and-braces.
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}

@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Reveal, revealProps } from "../../common/Reveal";
 import { motion } from "framer-motion";
 
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 
 const footerBg = {
   background: `
@@ -85,51 +87,52 @@ const PlaneIcon = () => (
 // Country flag emojis / icons (simplified SVG outlines as circles with country code)
 const CanadaIcon = () => (
   <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-    <circle cx="16" cy="16" r="14" stroke="#C9A96E" strokeWidth="1.5" fill="none"/>
-    <path d="M16 8 L18 14 L24 12 L20 17 L24 20 L17 18 L16 24 L15 18 L8 20 L12 17 L8 12 L14 14 Z" fill="#C9A96E" opacity="0.7"/>
+    <circle cx="16" cy="16" r="14" stroke="#E0BF94" strokeWidth="1.5" fill="none"/>
+    <path d="M16 8 L18 14 L24 12 L20 17 L24 20 L17 18 L16 24 L15 18 L8 20 L12 17 L8 12 L14 14 Z" fill="#E0BF94" opacity="0.7"/>
   </svg>
 );
 
 const AustraliaIcon = () => (
   <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-    <circle cx="16" cy="16" r="14" stroke="#C9A96E" strokeWidth="1.5" fill="none"/>
-    <path d="M10 10 Q16 7 22 10 Q25 16 22 22 Q16 25 10 22 Q7 16 10 10Z" stroke="#C9A96E" strokeWidth="1" fill="none" opacity="0.6"/>
-    <circle cx="16" cy="16" r="3" stroke="#C9A96E" strokeWidth="1" fill="none"/>
+    <circle cx="16" cy="16" r="14" stroke="#E0BF94" strokeWidth="1.5" fill="none"/>
+    <path d="M10 10 Q16 7 22 10 Q25 16 22 22 Q16 25 10 22 Q7 16 10 10Z" stroke="#E0BF94" strokeWidth="1" fill="none" opacity="0.6"/>
+    <circle cx="16" cy="16" r="3" stroke="#E0BF94" strokeWidth="1" fill="none"/>
   </svg>
 );
 
 const UKIcon = () => (
   <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-    <circle cx="16" cy="16" r="14" stroke="#C9A96E" strokeWidth="1.5" fill="none"/>
-    <rect x="10" y="8" width="4" height="16" fill="#C9A96E" opacity="0.5"/>
-    <rect x="8" y="14" width="16" height="4" fill="#C9A96E" opacity="0.5"/>
-    <path d="M10 10 L22 22 M22 10 L10 22" stroke="#C9A96E" strokeWidth="1" opacity="0.4"/>
+    <circle cx="16" cy="16" r="14" stroke="#E0BF94" strokeWidth="1.5" fill="none"/>
+    <rect x="10" y="8" width="4" height="16" fill="#E0BF94" opacity="0.5"/>
+    <rect x="8" y="14" width="16" height="4" fill="#E0BF94" opacity="0.5"/>
+    <path d="M10 10 L22 22 M22 10 L10 22" stroke="#E0BF94" strokeWidth="1" opacity="0.4"/>
   </svg>
 );
 
 const USAIcon = () => (
   <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-    <circle cx="16" cy="16" r="14" stroke="#C9A96E" strokeWidth="1.5" fill="none"/>
-    <path d="M13 9 L16 6 L19 9 L16 12 Z" fill="#C9A96E" opacity="0.7"/>
-    <path d="M9 13 L12 16 L9 19 L6 16 Z" fill="#C9A96E" opacity="0.5"/>
-    <path d="M16 20 L19 23 L16 26 L13 23 Z" fill="#C9A96E" opacity="0.5"/>
-    <circle cx="16" cy="16" r="4" stroke="#C9A96E" strokeWidth="1" fill="none" opacity="0.4"/>
+    <circle cx="16" cy="16" r="14" stroke="#E0BF94" strokeWidth="1.5" fill="none"/>
+    <path d="M13 9 L16 6 L19 9 L16 12 Z" fill="#E0BF94" opacity="0.7"/>
+    <path d="M9 13 L12 16 L9 19 L6 16 Z" fill="#E0BF94" opacity="0.5"/>
+    <path d="M16 20 L19 23 L16 26 L13 23 Z" fill="#E0BF94" opacity="0.5"/>
+    <circle cx="16" cy="16" r="4" stroke="#E0BF94" strokeWidth="1" fill="none" opacity="0.4"/>
   </svg>
 );
 
 const EuropeIcon = () => (
   <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-    <circle cx="16" cy="16" r="14" stroke="#C9A96E" strokeWidth="1.5" fill="none" strokeDasharray="3 2"/>
-    <circle cx="16" cy="16" r="6" stroke="#C9A96E" strokeWidth="1" fill="none"/>
+    <circle cx="16" cy="16" r="14" stroke="#E0BF94" strokeWidth="1.5" fill="none" strokeDasharray="3 2"/>
+    <circle cx="16" cy="16" r="6" stroke="#E0BF94" strokeWidth="1" fill="none"/>
   </svg>
 );
 
 const quickLinks = ["Home", "About Us", "Our Services", "How We Work", "Success Stories", "Contact Us"];
-const services = ["Study Abroad", "Permanent Residency", "Tourist Visa", "Study Visa"];
+const services = ["Study Visas", "Permanent Residency", "Tourist Visas", "IELTS", "PTE"];
 
-const NavLink: React.FC<{ label: string; index?: number }> = ({ label, index = 0 }) => (
+const NavLink: React.FC<{ label: string; index?: number; onClick?: () => void }> = ({ label, index = 0, onClick }) => (
   <motion.li
     {...revealProps("up", Math.min(index * 0.08, 0.4))}
+    onClick={onClick}
     className="flex items-center gap-2 group cursor-pointer"
   >
     <ChevronRight />
@@ -152,6 +155,7 @@ const SocialButton: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 );
 
 const VisaGuyFooter: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <footer style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       {/* Divider with plane */}
@@ -183,7 +187,7 @@ const VisaGuyFooter: React.FC = () => {
                 <div className="text-xl font-bold tracking-widest" style={{ color: NAVY, letterSpacing: "0.15em" }}>
                   VISA GUY
                 </div>
-                <div className="text-xs italic" style={{ color: GOLD }}>
+                <div className="text-xs italic" style={{ color: GOLD_TEXT }}>
                   Your Journey. Our Expertise.
                 </div>
               </div>
@@ -224,7 +228,12 @@ const VisaGuyFooter: React.FC = () => {
             <div className="w-8 h-0.5 mb-5" style={{ background: GOLD }} />
             <ul className="flex flex-col gap-3">
               {services.map((s, i) => (
-                <NavLink key={s} label={s} index={i} />
+                <NavLink
+                  key={s}
+                  label={s}
+                  index={i}
+                  onClick={s === "Study Visas" ? () => navigate("/study-abroad") : undefined}
+                />
               ))}
             </ul>
           </motion.div>
@@ -272,7 +281,11 @@ const VisaGuyFooter: React.FC = () => {
               </li>
               <li className="flex items-center gap-3">
                 <span style={{ color: GOLD }}><MailIcon /></span>
-                <a href="mailto:hello@visaguy.com" className="text-sm hover:opacity-75 transition-opacity" style={{ color: NAVY }}>hello@visaguy.com</a>
+                <div className="flex flex-col">
+                <a href="mailto:sarthak@visaguyimm.com" className="text-sm hover:opacity-75 transition-opacity" style={{ color: NAVY }}>sarthak@visaguyimm.com</a>
+                
+                <a href="mailto:sarthak@visaguyimm.com" className="text-sm hover:opacity-75 transition-opacity" style={{ color: NAVY }}>spearheadjammu@gmail.com</a>
+                </div>
               </li>
               <li className="flex items-start gap-3">
                 <span style={{ color: GOLD }}><MapPinIcon /></span>

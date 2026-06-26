@@ -21,7 +21,8 @@ const SIDE_IMAGE =
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 const DARK = "#231F20";
 
 // gold gradient (center icon circles)
@@ -180,7 +181,7 @@ const WhyChooseUs: React.FC = () => {
           {/* Eyebrow */}
           <Reveal direction="down" delay={0}>
             <div className="mb-5 flex items-center gap-3">
-              <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD }}>
+              <span className="text-xs font-semibold tracking-[0.25em]" style={{ color: GOLD_TEXT }}>
                 WHY CHOOSE US
               </span>
               <span className="h-px w-10" style={{ backgroundColor: GOLD }} />
@@ -192,7 +193,7 @@ const WhyChooseUs: React.FC = () => {
             <h2 className="font-heading text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
               <span style={{ color: NAVY }}>Why Choose</span>
               <br />
-              <span style={{ color: GOLD }}>Visa Guy</span>
+              <span style={{ color: GOLD_TEXT }}>Visa Guy</span>
             </h2>
           </Reveal>
 
@@ -244,7 +245,7 @@ const WhyChooseUs: React.FC = () => {
         {/* ───────── Right column ───────── */}
         <div className="flex flex-col gap-6">
           {/* Comparison card */}
-          <Reveal direction="right" delay={0.1} className="relative rounded-3xl bg-white/55 p-5 shadow-[0_18px_50px_-24px_rgba(35,31,32,0.35)] sm:p-8">
+          <Reveal direction="right" delay={0.1} className="relative rounded-3xl bg-white/55 p-4 shadow-[0_18px_50px_-24px_rgba(35,31,32,0.35)] sm:p-8">
             {/* Headers */}
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
               <p className="text-center text-sm font-bold tracking-[0.2em]" style={{ color: "#9aa0ab" }}>

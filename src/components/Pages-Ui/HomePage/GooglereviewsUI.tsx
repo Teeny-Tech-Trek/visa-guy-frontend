@@ -20,7 +20,8 @@ import { Reveal } from "../../common/Reveal";
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
 const GOLD = "#E0BF94";
-const NAVY = "#184068";
+const GOLD_TEXT = "#C5A028";
+const NAVY = "#0e1730";
 const DARK = "#231F20";
 
 /* ──────────────── Icons ──────────────── */
@@ -145,7 +146,7 @@ const GoogleReviews: React.FC = () => {
             <span className="h-px w-8 sm:w-10" style={{ backgroundColor: GOLD }} />
             <span
               className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.25em]"
-              style={{ color: GOLD }}
+              style={{ color: GOLD_TEXT }}
             >
               GOOGLE REVIEWS
             </span>
@@ -157,7 +158,7 @@ const GoogleReviews: React.FC = () => {
         <Reveal direction="up" delay={0.08}>
           <h2 className="font-heading text-2xl font-semibold leading-[1.1] sm:text-4xl lg:text-5xl sm:leading-[1.05]">
             <span style={{ color: NAVY }}>Trusted by 500+ </span>
-            <span style={{ color: GOLD }}>Happy Clients</span>
+            <span style={{ color: GOLD_TEXT }}>Happy Clients</span>
           </h2>
         </Reveal>
 
