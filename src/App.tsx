@@ -13,6 +13,13 @@ function App() {
     let loco: LocomotiveScroll | null = null;
 
     const initScroll = () => {
+      // Bypass Locomotive Scroll on mobile/tablet devices to leverage native momentum scrolling
+      const isMobile = window.innerWidth < 1024 || /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent);
+      if (isMobile) {
+        setSmoothScroll(null);
+        return;
+      }
+
       loco = new LocomotiveScroll({
         lenisOptions: {
           lerp: 0.09,
