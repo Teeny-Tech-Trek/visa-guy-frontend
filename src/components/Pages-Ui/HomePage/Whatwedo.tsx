@@ -16,11 +16,11 @@ import { motion } from "framer-motion";
 */
 
 // 👇 Center video — apna video ka path yahan laga dena (e.g. "/Whatwedo-Video.mp4")
-const CENTER_VIDEO =
-  "/Globe-Video.webm";
+const CENTER_VIDEO_WEBM = "/Globe-Video.webm";
+const CENTER_VIDEO_MOV = "/Globe-Video-ForIphone.mov";
 
 // Static stand-in shown where the video can't render (see needsVideoFallback).
-const CENTER_FALLBACK_IMAGE = "/Whatwedo-Image.webp";
+// const CENTER_FALLBACK_IMAGE = "/Whatwedo-Image.webp";
 
 // Globe-Video.webm is VP9 with an ALPHA channel. WebKit — every iOS browser
 // (Safari/Chrome/Firefox on iPhone all use WebKit) and desktop Safari —
@@ -221,20 +221,29 @@ const WhatWeDo: React.FC = () => {
           {/* ───────── Center video (static image where alpha-WebM can't render) ───────── */}
           <Reveal direction="up" delay={0.1} className="flex items-center justify-center lg:col-span-3">
             
-              <video
-                src={CENTER_VIDEO}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                disablePictureInPicture
-                controlsList="nodownload noplaybackrate"
-                onContextMenu={(e) => e.preventDefault()}
-                onError={() => setShowVideoFallback(true)}
-                aria-hidden="true"
-                className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
-              />
+             <video
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="metadata"
+  disablePictureInPicture
+  controlsList="nodownload noplaybackrate"
+  onContextMenu={(e) => e.preventDefault()}
+  onError={() => setShowVideoFallback(true)}
+  aria-hidden="true"
+  className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
+>
+  <source
+    src={CENTER_VIDEO_MOV}
+    type='video/mp4; codecs="hvc1"'
+  />
+
+  <source
+    src={CENTER_VIDEO_WEBM}
+    type="video/webm"
+  />
+</video>
             
           </Reveal>
 

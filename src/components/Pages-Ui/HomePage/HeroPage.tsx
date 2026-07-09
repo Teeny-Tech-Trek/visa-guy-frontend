@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+import { refreshScroll } from "../../../lib/smoothScroll";
 import Navbar from "./Navbar";
 import HeroWorldMap from "./HeroWorldMap";
 
@@ -88,7 +89,7 @@ const HeroPage: React.FC = () => {
     const ctx = gsap.context(() => {
 
       // ── Intro overlay & intro plane setup ──
-      gsap.set(".intro-overlay", { opacity: 1 });
+      gsap.set(".intro-overlay", { opacity: 1, display: "block" });
       gsap.set(".intro-plane", {
         opacity: 0,
         x: "-60vw",
@@ -137,7 +138,11 @@ const HeroPage: React.FC = () => {
           ease: "power2.out",
           onComplete: () => {
             const el = document.querySelector(".intro-overlay") as HTMLElement;
-            if (el) el.style.pointerEvents = "none";
+            if (el) {
+              el.style.pointerEvents = "none";
+              el.style.display = "none";
+            }
+            refreshScroll();
           },
         }, "-=0.25")
 
@@ -362,7 +367,7 @@ const HeroPage: React.FC = () => {
             <span className="hero-divider mt-7 block h-px w-10 bg-[#d4af6a]" />
 
             {/* Description */}
-            <p className="hero-desc mt-6 max-w-md text-base leading-relaxed text-gray-300 sm:text-lg">
+            <p className="hero-desc mt-6 max-w-md text-base leading-relaxed text-gray-100 sm:text-lg">
               Expert guidance for study visas, permanent residency, tourist
               visas, IELTS &amp; PTE. We make your journey clear, smooth and
               successful.

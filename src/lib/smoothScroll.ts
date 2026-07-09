@@ -7,6 +7,7 @@
 */
 
 import type LocomotiveScroll from "locomotive-scroll";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 let instance: LocomotiveScroll | null = null;
 
@@ -29,12 +30,34 @@ export function scrollToTarget(target: string) {
   }
 }
 
+/** Recalculate heights and layout for both Locomotive Scroll and GSAP ScrollTrigger. */
+export function refreshScroll() {
+  if (instance) {
+    instance.resize();
+  }
+  ScrollTrigger.refresh();
+}
+
 /** Jump to the very top of the page instantly (used on route changes). */
 export function scrollToTop() {
   if (instance) {
     // Locomotive v5 (Lenis): duration 0 = no animation, just snap to top.
     instance.scrollTo(0, { duration: 0, immediate: true });
+    
+    // Recalculate heights once DOM has settled after route transition
+    setTimeout(() => {
+      if (instance) {
+        instance.resize();
+      }
+      ScrollTrigger.refresh();
+    }, 100);
+  } else {
+    // Fallback mode trigger refresh
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }
   // Also reset the native scroll position as a fallback / belt-and-braces.
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 }
+

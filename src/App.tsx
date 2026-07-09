@@ -10,20 +10,32 @@ function App() {
     // Locomotive Scroll v5 (Lenis-based, native scroll) — smooth scrolling
     // for the whole page. Native-scroll keeps the fixed navbar and all
     // framer-motion whileInView reveals working correctly.
-    const loco = new LocomotiveScroll({
-      lenisOptions: {
-        lerp: 0.09,
-        duration: 1.2,
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 1.5,
-      },
-    });
-    setSmoothScroll(loco);
+    let loco: LocomotiveScroll | null = null;
+
+    const initScroll = () => {
+      loco = new LocomotiveScroll({
+        lenisOptions: {
+          lerp: 0.09,
+          duration: 1.2,
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 1.5,
+        },
+      });
+      setSmoothScroll(loco);
+    };
+
+    // Delay initialization slightly to let the initial render cycles settle.
+    // In React Strict Mode, the first mount will be cleaned up immediately,
+    // canceling the timeout before LocomotiveScroll is ever instantiated.
+    const timer = setTimeout(initScroll, 50);
 
     return () => {
-      loco.destroy();
-      setSmoothScroll(null);
+      clearTimeout(timer);
+      if (loco) {
+        loco.destroy();
+        setSmoothScroll(null);
+      }
     };
   }, []);
 
