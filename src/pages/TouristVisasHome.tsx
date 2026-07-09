@@ -3,7 +3,7 @@ import Navbar from "../components/Pages-Ui/HomePage/Navbar";
 import TouristVisaHero from "../components/Pages-Ui/Tourist-Visas/TouristvisaHero";
 
 
-function StudyAbroadHome() {
+function TouristVisasHome() {
   return (
     <div>
       <Navbar />
@@ -13,4 +13,4 @@ function StudyAbroadHome() {
   );
 }
 
-export default StudyAbroadHome;
+export default TouristVisasHome;

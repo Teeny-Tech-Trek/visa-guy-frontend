@@ -23,6 +23,15 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* Prevent any stray full-bleed / off-screen element from creating a
+   horizontal scrollbar (the white gutter on the right on mobile). */
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 /* ── Heading font: "The Seasons" ───────────────────────────────────────────
    Font file ko yahan rakhna: Frontend-main/public/fonts/  (in naamon me se koi ek)
    — TheSeasons.woff2 / TheSeasons.otf / TheSeasons.ttf
