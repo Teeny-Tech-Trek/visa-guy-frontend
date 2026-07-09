@@ -220,14 +220,7 @@ const WhatWeDo: React.FC = () => {
 
           {/* ───────── Center video (static image where alpha-WebM can't render) ───────── */}
           <Reveal direction="up" delay={0.1} className="flex items-center justify-center lg:col-span-3">
-            {showVideoFallback ? (
-              <img
-                src={CENTER_FALLBACK_IMAGE}
-                alt=""
-                aria-hidden="true"
-                className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
-              />
-            ) : (
+            
               <video
                 src={CENTER_VIDEO}
                 autoPlay
@@ -242,7 +235,7 @@ const WhatWeDo: React.FC = () => {
                 aria-hidden="true"
                 className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
               />
-            )}
+            
           </Reveal>
 
           {/* ───────── Right timeline ───────── */}
