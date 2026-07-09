@@ -438,8 +438,8 @@ export default function TalkToVisaGuy() {
 
         <Reveal direction="up" delay={0.16}>
           <p style={{ fontSize: "clamp(14px, 3.5vw, 15px)", color: BODY_TEXT, lineHeight: 1.65, margin: 0 }}>
-            Planning a move abroad? Share a few details and our
-            <br />
+            Planning a move abroad? Share a few details and our{" "}
+            <br className="hidden sm:inline" />
             experts will guide you through the right path.
           </p>
         </Reveal>

@@ -184,7 +184,7 @@ const WhyStudyAbroad: React.FC = () => {
         </div>
 
         {/* ── Right: 4 Feature Cards ── */}
-        <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {features.map((feat, i) => (
             <div
               key={i}

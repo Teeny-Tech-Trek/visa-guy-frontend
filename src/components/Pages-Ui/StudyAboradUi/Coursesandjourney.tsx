@@ -275,7 +275,7 @@ const CoursesAndJourney: React.FC = () => {
         className="relative mx-auto max-w-[1200px] px-5 pt-12 pb-10 sm:px-10 sm:pt-16 sm:pb-14"
       >
         {/* nav arrows top-right */}
-        <div className="absolute right-5 top-12 flex gap-2 sm:right-10 sm:top-16">
+        <div className="absolute right-5 top-12 hidden gap-2 sm:right-10 sm:top-16 sm:flex">
           {["‹", "›"].map((ch) => (
             <button
               key={ch}
@@ -386,7 +386,7 @@ const CoursesAndJourney: React.FC = () => {
               {/* Description */}
               <p
                 className="m-0 text-[11px] leading-[1.55]"
-                style={{ color: "rgba(14,23,48,55)" }}
+                style={{ color: "rgba(14,23,48,0.55)" }}
               >
                 {s.desc}
               </p>

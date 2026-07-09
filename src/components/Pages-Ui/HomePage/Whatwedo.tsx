@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Reveal, revealProps } from "../../common/Reveal";
 import { motion } from "framer-motion";
@@ -18,6 +18,26 @@ import { motion } from "framer-motion";
 // 👇 Center video — apna video ka path yahan laga dena (e.g. "/Whatwedo-Video.mp4")
 const CENTER_VIDEO =
   "/Globe-Video.webm";
+
+// Static stand-in shown where the video can't render (see needsVideoFallback).
+const CENTER_FALLBACK_IMAGE = "/Whatwedo-Image.webp";
+
+// Globe-Video.webm is VP9 with an ALPHA channel. WebKit — every iOS browser
+// (Safari/Chrome/Firefox on iPhone all use WebKit) and desktop Safari —
+// cannot decode VP9 alpha: older versions don't play WebM at all, newer ones
+// render the transparency as a solid black box. Those engines get the static
+// image instead; Chrome/Edge/Firefox/Android keep the animated video.
+const needsVideoFallback = () => {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  const isIOS =
+    /iP(hone|ad|od)/.test(ua) ||
+    // iPadOS reports itself as macOS but is touch-capable
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isSafari =
+    /safari/i.test(ua) && !/chrome|chromium|crios|android|edg/i.test(ua);
+  return isIOS || isSafari;
+};
 
 /* ──────────────── Palette ──────────────── */
 const CREAM = "#F0EBE4";
@@ -125,6 +145,8 @@ const CHEVRON =
 
 const WhatWeDo: React.FC = () => {
   const navigate = useNavigate();
+  // true → render the static image instead of the alpha-WebM video.
+  const [showVideoFallback, setShowVideoFallback] = useState(needsVideoFallback);
   return (
     <section
       className="w-full"
@@ -196,21 +218,31 @@ const WhatWeDo: React.FC = () => {
             </Reveal>
           </div>
 
-          {/* ───────── Center video ───────── */}
+          {/* ───────── Center video (static image where alpha-WebM can't render) ───────── */}
           <Reveal direction="up" delay={0.1} className="flex items-center justify-center lg:col-span-3">
-            <video
-              src={CENTER_VIDEO}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              disablePictureInPicture
-              controlsList="nodownload noplaybackrate"
-              onContextMenu={(e) => e.preventDefault()}
-              aria-hidden="true"
-              className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
-            />
+            {showVideoFallback ? (
+              <img
+                src={CENTER_FALLBACK_IMAGE}
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
+              />
+            ) : (
+              <video
+                src={CENTER_VIDEO}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                disablePictureInPicture
+                controlsList="nodownload noplaybackrate"
+                onContextMenu={(e) => e.preventDefault()}
+                onError={() => setShowVideoFallback(true)}
+                aria-hidden="true"
+                className="pointer-events-none mx-auto w-2/3 max-w-xs select-none object-contain sm:w-1/2 lg:w-full lg:max-w-none lg:scale-125"
+              />
+            )}
           </Reveal>
 
           {/* ───────── Right timeline ───────── */}
@@ -242,7 +274,7 @@ const WhatWeDo: React.FC = () => {
                   <div
                     key={step.no}
                     onClick={isStudyVisa ? () => navigate("/study-abroad") : undefined}
-                    className={`relative flex items-center gap-3 py-4 pl-4 pr-10 shadow-[0_10px_28px_-16px_rgba(35,31,32,0.3)] sm:gap-4 sm:py-5 sm:pl-5 sm:pr-16${isStudyVisa ? " cursor-pointer" : ""}`}
+                    className={`relative flex items-center gap-3 py-4 pl-4 pr-16 shadow-[0_10px_28px_-16px_rgba(35,31,32,0.3)] sm:gap-4 sm:py-5 sm:pl-5 sm:pr-24${isStudyVisa ? " cursor-pointer" : ""}`}
                     style={{
                       clipPath: CHEVRON,
                       backgroundColor: isOdd ? "#ffffff" : "rgba(224,191,148,0.28)",

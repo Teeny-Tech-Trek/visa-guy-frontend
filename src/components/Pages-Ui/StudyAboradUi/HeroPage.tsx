@@ -96,7 +96,7 @@ const StudyAbroad: React.FC = () => {
         background: `radial-gradient(135% 135% at 100% 0%, ${GOLD} 0%, transparent 50%), radial-gradient(135% 135% at 100% 100%, ${GOLD} 0%, transparent 50%), ${CREAM}`,
       }}
     >
-      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-5 lg:px-12 lg:py-6">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-4 py-8 sm:px-8 sm:py-5 lg:px-12 lg:py-6 mt-14">
 
         {/* ── Main Grid: Left text | Right image ── */}
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-[48px]">

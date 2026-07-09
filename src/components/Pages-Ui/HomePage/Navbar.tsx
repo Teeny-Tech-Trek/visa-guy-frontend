@@ -48,7 +48,15 @@ const ChevronDown = ({ open }: { open: boolean }) => (
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const navigate = useNavigate();
+
+  // Close the mobile drawer (and collapse its services submenu so the
+  // menu always reopens in its compact state).
+  const closeMobileMenu = () => {
+    setMenuOpen(false);
+    setMobileServicesOpen(false);
+  };
 
   // Smoothly scroll to the target section via Locomotive Scroll.
   const handleNavClick = (
@@ -57,7 +65,7 @@ const Navbar: React.FC = () => {
   ) => {
     e.preventDefault();
     scrollToTarget(href);
-    setMenuOpen(false);
+    closeMobileMenu();
   };
 
   // Logo always returns to the home page (and scrolls to top when already there).
@@ -65,14 +73,14 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     navigate("/");
     scrollToTarget("#home");
-    setMenuOpen(false);
+    closeMobileMenu();
   };
 
   // Each service opens its own page route.
   const handleServiceClick = (to: string) => {
     navigate(to);
     setServicesOpen(false);
-    setMenuOpen(false);
+    closeMobileMenu();
   };
 
   return (
@@ -170,7 +178,7 @@ const Navbar: React.FC = () => {
             type="button"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => (menuOpen ? closeMobileMenu() : setMenuOpen(true))}
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-gray-200 transition-colors hover:text-[#e9cf9c] lg:hidden"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
@@ -195,23 +203,47 @@ const Navbar: React.FC = () => {
             transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
             className="overflow-hidden lg:hidden"
           >
-            <div className="mt-3 flex flex-col gap-1 border-t border-white/10 pt-3">
+            <div className="mt-3 flex max-h-[calc(100vh-8rem)] flex-col gap-1 overflow-y-auto border-t border-white/10 pt-3">
               {navLinks.map((link) =>
                 link.label === "Services" ? (
                   <div key="services-mobile" className="flex flex-col">
-                    <span className="px-2 pt-2 pb-1 text-xs font-semibold uppercase tracking-wider text-[#e9cf9c]">
+                    <button
+                      type="button"
+                      onClick={() => setMobileServicesOpen((open) => !open)}
+                      aria-expanded={mobileServicesOpen}
+                      aria-controls="mobile-services-submenu"
+                      className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-xs font-semibold uppercase tracking-wider text-[#e9cf9c] transition-colors hover:bg-white/5"
+                    >
                       Our Services
-                    </span>
-                    {serviceLinks.map((s) => (
-                      <button
-                        key={s.label}
-                        type="button"
-                        onClick={() => handleServiceClick(s.to)}
-                        className="rounded-lg px-4 py-2 text-left text-sm font-medium text-gray-200 transition-colors hover:bg-white/5 hover:text-[#e9cf9c]"
-                      >
-                        {s.label}
-                      </button>
-                    ))}
+                      <ChevronDown open={mobileServicesOpen} />
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {mobileServicesOpen && (
+                        <motion.div
+                          key="mobile-services-submenu"
+                          id="mobile-services-submenu"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: [0.22, 0.61, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="flex flex-col pb-1">
+                            {serviceLinks.map((s) => (
+                              <button
+                                key={s.label}
+                                type="button"
+                                onClick={() => handleServiceClick(s.to)}
+                                className="rounded-lg px-4 py-2 text-left text-sm font-medium text-gray-200 transition-colors hover:bg-white/5 hover:text-[#e9cf9c]"
+                              >
+                                {s.label}
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ) : (
                   <a

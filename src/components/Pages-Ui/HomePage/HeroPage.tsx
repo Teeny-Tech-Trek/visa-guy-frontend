@@ -5,6 +5,8 @@ import Navbar from "./Navbar";
 import HeroWorldMap from "./HeroWorldMap";
 
 const BG_IMAGE = "/Hero-Image.webp";
+// Portrait background used on phone-size screens (< 640px).
+const BG_IMAGE_MOBILE = "/Hero-Image-ForMobile.png";
 const PLANE_IMAGE = "/Plane-Image1.webp";
 
 const HEADING_TEXT = "Planning your next step abroad is simpler here.";
@@ -303,9 +305,15 @@ const HeroPage: React.FC = () => {
         }
       `}</style>
 
-      {/* Background */}
+      {/* Background — portrait art on phones, wide art from sm: up.
+          The hidden variant is display:none, so browsers skip its download. */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center sm:hidden"
+        style={{ backgroundImage: `url(${BG_IMAGE_MOBILE})` }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 hidden bg-cover bg-center sm:block"
         style={{ backgroundImage: `url(${BG_IMAGE})` }}
         aria-hidden="true"
       />

@@ -174,10 +174,10 @@ const VisaGuyFooter: React.FC = () => {
 
       {/* Main Footer Body */}
       <div style={footerBg} className="px-6 sm:px-8 md:px-10 py-10 md:py-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
 
           {/* Brand Column */}
-          <motion.div {...revealProps("left", Math.min(0 * 0.08, 0.4))} className="sm:col-span-2 md:col-span-1 flex flex-col gap-5">
+          <motion.div {...revealProps("left", Math.min(0 * 0.08, 0.4))} className="sm:col-span-2 md:col-span-3 lg:col-span-1 flex flex-col gap-5">
             {/* Logo */}
             <div className="flex items-center gap-3">
               <div className="relative flex-shrink-0">

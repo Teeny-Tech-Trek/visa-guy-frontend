@@ -32,6 +32,18 @@ body,
   overflow-x: hidden;
 }
 
+/* ── Mobile form zoom fix ────────────────────────────────────────────────
+   iOS Safari auto-zooms the page when a form control with font-size < 16px
+   receives focus. Force 16px on touch-size screens only (overrides the
+   form's inline 14px styles); desktop keeps the original design sizes. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 /* ── Heading font: "The Seasons" ───────────────────────────────────────────
    Font file ko yahan rakhna: Frontend-main/public/fonts/  (in naamon me se koi ek)
    — TheSeasons.woff2 / TheSeasons.otf / TheSeasons.ttf
